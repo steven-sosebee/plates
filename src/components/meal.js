@@ -1,0 +1,36 @@
+import { usePageDataContext } from "../context/data";
+import { dbCall } from "../utils";
+
+export const Meal =({meal, returnData})=>{
+    const {pageData,setPageData}=usePageDataContext();
+
+    let headers={
+        class:'Recipe'
+    };
+
+    const selectMeal =(e)=>{
+        let body={
+            id:e.target.id
+        }
+        headers.action='select';
+        dbCall(body,headers)
+        .then(res=>{
+            let activeMeal=res[0];
+            console.log(activeMeal);
+            activeMeal.recipe_name=`${activeMeal?.recipe_name} - new`;
+            const _pageData= {...pageData};
+            _pageData.activeMeal=activeMeal;
+            // console.log(_pageData);
+            setPageData(_pageData)});
+    };
+    
+    const handleDelete= async ()=>{
+    dbCall([],{class:"Recipe",action:"delete"})    
+    };
+
+    return (
+        <li onClick={(e)=>{selectMeal(e)}}id={meal.recipeId} key={meal.recipeId}>
+            {meal.recipe_name} - uploaded at: {meal.created_at}
+        </li>
+    )
+}

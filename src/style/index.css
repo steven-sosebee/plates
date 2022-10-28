@@ -1,0 +1,5 @@
+.flex {
+    display: grid;
+    grid-auto-flow: column;
+    width: 25%;
+}
