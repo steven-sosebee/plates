@@ -8,6 +8,7 @@
     $model["Recipe"]= new Recipe;
     $model['Ingredient'] = new Ingredient;
     $model["Test"] = new Base;
+    $model["Step"] = new Step;
     // $model["Grocery"] = new Grocery;
 
 

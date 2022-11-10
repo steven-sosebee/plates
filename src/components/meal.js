@@ -20,7 +20,7 @@ export const Meal =({meal, returnData})=>{
             activeMeal.recipe_name=`${activeMeal?.recipe_name} - new`;
             const _pageData= {...pageData};
             _pageData.activeMeal=activeMeal;
-            // console.log(_pageData);
+            console.log(_pageData);
             setPageData(_pageData)});
     };
     
@@ -29,8 +29,14 @@ export const Meal =({meal, returnData})=>{
     };
 
     return (
-        <li onClick={(e)=>{selectMeal(e)}}id={meal.recipeId} key={meal.recipeId}>
-            {meal.recipe_name} - uploaded at: {meal.created_at}
+        <li id={meal.recipeId} key={meal.recipeId}>
+            <a href={`/recipe/${meal.recipeId}`}>{meal.recipe_name} - uploaded at: {meal.created_at}</a>
+            {/* <a href={`/?recipe=${meal.recipeId}`}>{meal.recipe_name} - uploaded at: {meal.created_at}</a> */}
         </li>
     )
+    // return (
+    //     <li onClick={(e)=>{selectMeal(e)}}id={meal.recipeId} key={meal.recipeId}>
+    //         {meal.recipe_name} - uploaded at: {meal.created_at}
+    //     </li>
+    // )
 }

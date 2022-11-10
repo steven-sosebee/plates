@@ -15,9 +15,9 @@ class Ingredient extends Base {
 
     public function add($params){
         $userId=1;
-            $sql="INSERT INTO $this->tbl (ingredientName, ingredientSizeQty, ingredientSize) VALUES (?,?,?)";
+            $sql="INSERT INTO $this->tbl (ingredientName, ingredientSizeQty, ingredientSize, recipeId) VALUES (?,?,?,?)";
             $stmt = $this->connection->prepare($sql);
-            $stmt->bind_param("sds",$params['ingredientName'],$params['ingredientSizeQty'],$params['ingredientSize']);
+            $stmt->bind_param("sdsi",$params['ingredientName'],$params['ingredientSizeQty'],$params['ingredientSize'],$params['recipeId']);
             $stmt->execute();
             $res = $stmt->affected_rows;
             echo json_encode($res);

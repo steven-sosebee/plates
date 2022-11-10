@@ -60,6 +60,9 @@ export const IngredientAdd =()=>{
                 <option>oz</option>
                 <option>gram</option>
                 <option>cup</option>
+                <option>lb</option>
+                <option>whole</option>
+                
             </select>
             <button onClick={()=>add()}>Add</button>
             <ul>

@@ -5,6 +5,7 @@
     require MODELS_PATH."baseModel.php";
     require MODELS_PATH."recipes.php";
     require MODELS_PATH."ingredients.php";
+    require MODELS_PATH."steps.php";
     // require MODELS_PATH."recipes.php";
 
     $params= json_decode(file_get_contents("php://input"),true);

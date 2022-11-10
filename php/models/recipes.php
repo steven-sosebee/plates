@@ -9,9 +9,9 @@
         }
         public function add($params){
             $userId=1;
-            $sql="INSERT INTO recipe (recipe_name,recipeUser,created_at) VALUES (?,?,?)";
+            $sql="INSERT INTO recipe (recipe_name,description,recipeUser,created_at,updated_at) VALUES (?,?,?,?,?)";
             $stmt = $this->connection->prepare($sql);
-            $stmt->bind_param("sis",$params['recipe_name'],$userId,$params['created_at']);
+            $stmt->bind_param("ssiss",$params['recipe_name'],$params['description'],$params['userId'],$params['created_at'],$params['updated_at']);
             $stmt->execute();
             // $res = $stmt->affected_rows;
             $res['id'] =  mysqli_insert_id($this->connection);

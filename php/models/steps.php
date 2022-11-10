@@ -1,6 +1,6 @@
 <?php
 
-class Steps extends Base {
+class Step extends Base {
 
     protected $tbl;
 
@@ -9,16 +9,22 @@ class Steps extends Base {
         $this->tbl='tblSteps';
     }
 
-    public function list(){
-        $this->sql="SELECT * FROM $this->tbl";
-        echo json_encode($this->runQuery());
+    public function list($params){
+        $this->sql="SELECT * FROM $this->tbl WHERE recipeId=?";
+        $stmt = $this->connection->prepare($this->sql);
+        $stmt->bind_param('i',$params['recipeId']);
+        $stmt->execute();
+        $res = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+        echo json_encode($res);
     }
 
     public function add($params){
         $sql="INSERT INTO $this->tbl (recipeId, stepDescription,stepCategory) VALUES (?,?,?)";
         $stmt = $this->connection->prepare($sql);
-        $stmt->bind_param("iss",$params['recipeId'],$params['stepDescription'],$params['stepCategory']);
-        $stmt->execute();
+        foreach ($params['steps'] as $step){
+            $stmt->bind_param("iss",$params['recipeId'],$step,$params['category']);
+            $stmt->execute();
+        }
         $res = $stmt->affected_rows;
         echo json_encode($res);
     }

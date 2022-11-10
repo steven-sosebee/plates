@@ -36,7 +36,7 @@ export const MealList =()=>{
   let fetchData;
   const [phpRes, setPHPRes] = useState();
   const [meals, setMeals] = useState([]);
-
+  const {pageData,setPageData}=usePageDataContext();
   useEffect(()=>{
     const _headers = {
       class:'Recipe',
@@ -56,12 +56,22 @@ export const MealList =()=>{
     ))
     let _pageData={...pageData};
     _pageData.steps=x;
-    setPageData(_pageData);
+    const body={
+      recipeId:pageData.activeMeal.recipeId,
+      steps:x,
+      category:1
+    };
+    const headers={
+      class:'Step',
+      action:'add'
+    }
+    dbCall(body, headers)
+    // setPageData(_pageData);
     //console.log(x);
   }  
   
   return (
-    <PageDataProvider>
+    <>
     <ul>
       {meals.map(x=>(
         <Meal meal={x}/>
@@ -71,6 +81,6 @@ export const MealList =()=>{
         <Steps/>
     </div>
     <button onClick={submit}>Submit</button>
-    </PageDataProvider>
+    </>
   );
 }
