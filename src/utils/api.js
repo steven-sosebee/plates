@@ -19,8 +19,3 @@ export const dbCall = async (body={}, headers)=>{
     .then(data=>{return data})
     .catch(error=>console.log(error))
 };
-
-export const dbDelete =async (body, model)=>{
-    return dbCall(body,{class:model,action:'delete'})
-    .then(res=>{return res});
-}

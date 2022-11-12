@@ -1,12 +1,12 @@
 export const Instructions = ({steps})=>{
     console.log(steps);
-    // if (!Array.isArray(steps)){
-    //     return (
-    //         <div>
-    //             <p>No instructions found...</p>
-    //         </div>
-    //     )
-    // }
+    if (!Array.isArray(steps)){
+        return (
+            <div>
+                <p>No instructions found...</p>
+            </div>
+        )
+    }
     return (
         <ul>
             {steps.map(step=>(

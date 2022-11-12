@@ -78,9 +78,7 @@ export const MealList =()=>{
       ))}
     </ul>
     <div className="flex">
-        <Steps/>
     </div>
-    <button onClick={submit}>Submit</button>
     </>
   );
 }

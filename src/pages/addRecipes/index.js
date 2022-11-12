@@ -1,6 +1,6 @@
 import { Ingredients } from "./ingredients";
 import { Steps } from "../../components/stepsList"
-import { Ingredient, Recipe } from "./pageFunctions"
+import { Ingredient, Recipe } from "../../classes"
 import { useState } from "react";
 
 export const MealAdd =() => {
@@ -28,10 +28,6 @@ export const MealAdd =() => {
                 break;
         }
         
-        // console.log([...x.classList])
-
-        // console.log([...x.children].map(x=>x.value));
-        // x.getElementsByTagName('select').value;
     }
     const testSubmit =async (e)=>{
         e.preventDefault();

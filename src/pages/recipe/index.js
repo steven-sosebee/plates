@@ -3,12 +3,14 @@ import { useParams } from "react-router-dom"
 import { dbCall } from "../../utils";
 import { Steps } from "../../components/stepsList";
 import { Ingredient, Instruction, Recipe } from "../../classes";
-import { Instructions } from "../addRecipes/instructions";
+import { Instructions } from "./instructions";
+import { Ingredients } from "./ingredients";
 
 export const RecipePage=()=>{
-    let cookbook;
-    let instructions;
-    const [steps, setSteps] = useState();
+    const [cookbook,setCookbook]=useState();
+    const [_ing,setIng] = useState();
+    const [_inst,setInst] = useState();
+    // const [steps, setSteps] = useState();
     const [loading,setLoading] = useState(true);
     const {recipe}=useParams();
     const params = new URLSearchParams(window.location.search);
@@ -21,38 +23,24 @@ export const RecipePage=()=>{
         id:recipe
     }
 
-    const getSteps = (id)=>{
-        const headers={
-            class:'Step',
-            action:'list'
-        };
-        const body={
-            recipeId:id
-        };
-
-        dbCall(body,headers)
-        .then(res=>console.log(res));
-    }
-
     useEffect(()=>{
-
-        const promises = [
-            new Recipe().select(recipe),
-            new Ingredient().select(recipe),
-            new Instruction().select(recipe)
-        ]
-        Promise.all(promises)
-        .then(res => console.log(res))
-        // console.log(recipe);
-        // dbCall(body,headers)
-        // const _recipe = new Recipe().select(recipe);
-        // _recipe
-        // .then(res=>cookbook=res)
-        // // .then(res=>getSteps(res[0].recipeId))
-        // .then(res=>(new Ingredient().list(res[0].recipeId)))
-        // .then(res=>(new Instruction().list(res[0].recipeId)))
-        // .then(data=>{console.log(data); setSteps(data); setLoading(false)})
-    },[])
+        const getData = async ()=>{
+            const promises = [
+                new Recipe().select(recipe),
+                new Ingredient().select(recipe),
+                new Instruction().select(recipe)
+            ]
+            Promise.all(promises)
+                .then(res => {
+                    setCookbook(res[0]);
+                    setIng(res[1]); 
+                    setInst(res[2]);
+                    setLoading(false);
+                })
+        }
+        
+        getData()
+    }, [])
 
     if (loading){
         return (
@@ -63,9 +51,10 @@ export const RecipePage=()=>{
         <>
         <div>Router-dom Param: <span>{recipe}</span></div>
         <div>Search Param: <span>{id}</span></div>
-        <div>Recipe Name: <span>{cookbook}</span></div>
-        <Instructions steps={steps}/>
-
+        <div>Recipe Name: <span>{cookbook[0].recipe_name}</span></div>
+        <Ingredients ingredients={_ing}/>
+        <Instructions steps={_inst}/>
+        
         </>
     )
 }
