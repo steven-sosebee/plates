@@ -14,14 +14,16 @@ class Ingredient extends Base {
     }
 
     public function add($params){
-        $userId=1;
             $sql="INSERT INTO $this->tbl (ingredientName, ingredientSizeQty, ingredientSize, recipeId) VALUES (?,?,?,?)";
             $stmt = $this->connection->prepare($sql);
-            $stmt->bind_param("sdsi",$params['ingredientName'],$params['ingredientSizeQty'],$params['ingredientSize'],$params['recipeId']);
-            $stmt->execute();
+            foreach ($params['ingredients'] as $ingredient){
+                $stmt->bind_param("sdsi",$ingredient['ingredientName'],$ingredient['ingredientSizeQty'],$ingredient['ingredientSize'],$params['recipeId']);
+                $stmt->execute();
+            }
             $res = $stmt->affected_rows;
             echo json_encode($res);
     }
+    
     public function select($params){
         $this->sql="SELECT * from $this->tbl WHERE recipeId=?";
         $stmt = $this->connection->prepare($this->sql);

@@ -1,9 +1,9 @@
-export const Ingredient = ()=>{
-
+export const Ingredient = ({ingredient={}})=>{
+    const {ingredientName,ingredientSizeQty, ingredientSize} = ingredient
     return ( 
         <tr>
-        <td className = {'text'} contentEditable='true'></td>
-        <td className = {'text'} contentEditable='true'></td>
+        <td className = {'text'} contentEditable='true'>{ingredientName}</td>
+        <td className = {'text'} contentEditable='true'>{ingredientSizeQty}</td>
         <td className = {'select'}>
             <select id="measure">
                 <option>Tspn</option>
