@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Step } from "./instruction";
 
-export const Instructions =()=>{
-    const [l,setL]=useState([]);
+export const Instructions =({instructions})=>{
+    const [l,setL]=useState(instructions);
     const {recipe}=useParams();
     
     

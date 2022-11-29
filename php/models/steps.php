@@ -19,11 +19,16 @@ class Step extends Base {
     }
 
     public function add($params){
-        $sql="INSERT INTO $this->tbl (recipeId, stepDescription,stepCategory) VALUES (?,?,?)";
+        // echo json_encode($params);
+        $sql="INSERT INTO $this->tbl (recipeId, stepCategory, stepMinutes, stepOrder, stepDescription,  stepTitle ) VALUES (?,?,?,?,?,?)";
         $stmt = $this->connection->prepare($sql);
-        foreach ($params['steps'] as $step){
-            $stmt->bind_param("iss",$params['recipeId'],$step,$params['category']);
+        // $index=1;
+        // $res = array();
+        foreach ($params['instructions'] as $step){
+            $stmt->bind_param("iiiiss",$params['recipeId'],$step['category'],$step['stepMinutes'],$step['stepOrder'], $step['description'], $step['stepTitle']);
             $stmt->execute();
+            // $index++;
+            // array_push($res,$step); 
         }
         $res = $stmt->affected_rows;
         echo json_encode($res);

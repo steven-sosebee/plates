@@ -8,10 +8,13 @@ export const Instructions = ({steps})=>{
         )
     }
     return (
-        <ul>
-            {steps.map(step=>(
-                <li><p>{step.stepDescription}</p></li>
+        <table>
+            <thead>
+                <th></th><th>Instruction</th><th>Minutes</th>
+            </thead>
+            {steps.map((step,i)=>(
+                <tr><td>{i+1}</td><td>{step.stepTitle}</td><td>{step.stepMinutes}</td></tr>
             ))}
-        </ul>
+        </table>
     )
 }
