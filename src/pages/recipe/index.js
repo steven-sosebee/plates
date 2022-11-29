@@ -13,8 +13,8 @@ export const RecipePage=()=>{
     // const [steps, setSteps] = useState();
     const [loading,setLoading] = useState(true);
     const {recipe}=useParams();
-    const params = new URLSearchParams(window.location.search);
-    const id= params.get('id');
+    // const params = new URLSearchParams(window.location.search);
+    // const id= params.get('id');
     const headers={
         class:'Recipe',
         action:'select'
@@ -49,8 +49,6 @@ export const RecipePage=()=>{
     }
     return(
         <>
-        <div>Router-dom Param: <span>{recipe}</span></div>
-        <div>Search Param: <span>{id}</span></div>
         <div>Recipe Name: <span>{cookbook[0].recipe_name}</span></div>
         <Ingredients ingredients={_ing}/>
         <Instructions steps={_inst}/>

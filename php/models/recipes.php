@@ -31,9 +31,10 @@
             $res = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
             echo json_encode($res);
         }
-        public function delete(){
-            $sql = "DELETE FROM recipe";
+        public function delete($params){
+            $sql = "DELETE FROM recipe WHERE recipeId=?";
             $stmt = $this->connection->prepare($sql);
+            $stmt->bind_param("i", $params['recipeId']);
             $stmt->execute();
             $res = $stmt->affected_rows;
             echo json_encode($res);

@@ -6,13 +6,17 @@ export default class Recipe {
         this.class = 'Recipe';
     }
 
+    async call(body, header){
+        console.log(body)
+        return dbCall(body, header)
+            .then(res=> (res))
+            .catch(err=>console.log(err))
+    }
     async add(recipeName, headline){
         this.userId = 1;
-        this.recipe_name = recipeName;
-        this.description = headline;
-        this.dbFormat = {
-            recipe_name: this.recipe_name,
-            description: this.description,
+        const dbFormat = {
+            recipe_name: recipeName,
+            description: headline,
             userId: this.userId,
             created_at: this.TS,
             updated_at:this.TS
@@ -22,15 +26,15 @@ export default class Recipe {
             class: this.class,
             action:'add'
         }
-        return dbCall(this.dbFormat,headers)
+
+        return dbCall(dbFormat,headers)
             .then(res=>{
-                console.log(res)
                 return res})
             .catch(err=>console.log(err))
 
     }
 
-    select(recipeId){
+    async select(recipeId){
         const headers = {
             class: this.class,
             action:'select'
@@ -43,7 +47,16 @@ export default class Recipe {
                 .catch(err=>console.log(err))
     }
 
-    delete(){
+    async delete(recipeId){
+        const body = {
+            recipeId:recipeId
+        }
+        const header = {
+            class:this.class,
+            action:'delete'
+        }
+        console.log({body,header})
+        return this.call(body,header);
 
     }
 

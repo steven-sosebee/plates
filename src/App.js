@@ -17,6 +17,7 @@ import { MealAdd } from "./pages/addRecipes";
 import { MealList, HomePage } from "./pages";
 import { PageDataProvider } from "./context/data";
 import { RecipePage } from "./pages/recipe";
+import { RecipeEdit } from "./pages/editRecipe";
 
 function App() {
   return (
@@ -30,9 +31,10 @@ function App() {
           <Route path="/recipe/add" element={<MealAdd/>}/>
           <Route path="/list" element={<MealList/>}/>
           <Route path="/" element={<HomePage/>}/>
-          <Route path="/ingredient/add" element={<IngredientAdd/>}/>
+          {/* <Route path="/ingredient/add" element={<IngredientAdd/>}/> */}
           <Route path="/recipe/:recipe" element={<RecipePage/>}/>
           <Route path="/recipe/" element={<RecipePage/>}/>
+          <Route path="/recipe/edit/:recipe" element={<RecipeEdit/>}/>
         </Routes>
       </Router>
     </PageDataProvider>

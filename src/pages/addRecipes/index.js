@@ -1,18 +1,10 @@
 import { Ingredients } from "./ingredients";
-import { Steps } from "../../components/stepsList"
-import { Ingredient, Recipe } from "../../classes"
+import { Instructions, instructions } from "./instructions"
+import { Ingredient, Instruction, Recipe } from "../../classes"
 import { useState } from "react";
 
 export const MealAdd =() => {
     const [recipe,setRecipe]=useState();
-    // const [recipeId,setRecipeId]=useState();
-
-    // const handleUpdate = (field,data)=>{
-    //     const _recipe = {...recipe};
-    //     _recipe[field]=data;
-    //     setRecipe(_recipe);
-    //     console.log(_recipe);
-    // }
 
     const getValue=(x)=>{
         const cellInput = [...x.classList];
@@ -29,33 +21,41 @@ export const MealAdd =() => {
         }
         
     }
-    const testSubmit =async (e)=>{
+    const recipeSubmit =async (e)=>{
         e.preventDefault();
         const recipeInfo = [
             document.getElementById('recipe_name').value,
             document.getElementById('description').value
         ];
-        const steps = [...document.getElementById('steps').rows].map(x=>[...x.cells].map(x=>getValue(x)));
-        // const steps = [...document.getElementsByClassName('step')];
-        const ingredients = [...document.getElementById('ingredients').rows].map(x=>[...x.cells].map(x=>getValue(x)));
-        const _recipe = new Recipe();
-        _recipe.add(recipeInfo)
-        .then(res=>{
-            console.log(res);
-            console.log(ingredients)
-            ingredients.map((x,i)=>{
-                new Ingredient().add(x[0],x[1],x[2],res.id);
-            });
-        })
-        .then(res=>{
-            console.log(steps)
-        })
-        
-        
-        console.log(steps.map((x,i)=>([x.value,i + 1])));
 
+        const instructions = [...document.getElementById('instructions').rows].map((x,i)=>({
+            stepTitle: getValue(x.cells[0]), 
+            category: parseInt(getValue(x.cells[1])), 
+            stepMinutes:parseInt(getValue(x.cells[3])),
+            description: getValue(x.cells[2]),
+            stepOrder: i + 1}));
+        
+        const ingredients = [...document.getElementById('ingredients').rows].map((x,i)=>({
+            ingredientName:getValue(x.cells[0]),
+            ingredientSizeQty:getValue(x.cells[1]),
+            ingredientSize:getValue(x.cells[2]) 
+        }));
+        
+        const _recipe = await new Recipe().add(
+            document.getElementById('recipe_name').value,
+            document.getElementById('description').value
+        );
+        
+        const _inst = await new Instruction().add(instructions,_recipe.id);
+        
+        const _ing = await new Ingredient().add(ingredients,_recipe.id)
+        
+        console.log([_recipe,_inst,_ing]);
+
+        window.location.href = `/recipe/${_recipe.id}`;
 
     }
+
     return (
         <div>
         <label>Recipe: </label><input type={'text'} id={'recipe_name'}/>
@@ -63,11 +63,11 @@ export const MealAdd =() => {
         <div id={'dropzone'}><p>Drop files here...</p></div>
         <button >Testing</button>
         <h3>Steps</h3>
-        <Steps/>
+        <Instructions/>
         <h3>Ingredients</h3>
         <Ingredients/>
 
-        <button onClick={testSubmit}>Create Recipe</button>                              
+        <button onClick={recipeSubmit}>Create Recipe</button>                              
         </div>
     )
 }
