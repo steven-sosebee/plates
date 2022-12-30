@@ -1,11 +1,12 @@
 export const Ingredient = ({ingredient={}})=>{
+    // console.log(ingredient);
     const {ingredientName,ingredientSizeQty, ingredientSize} = ingredient
     return ( 
-        <tr>
+        <tr draggable={true}>
         <td className = {'text'} contentEditable='true'>{ingredientName}</td>
         <td className = {'text'} contentEditable='true'>{ingredientSizeQty}</td>
         <td className = {'select'}>
-            <select id="measure">
+            <select id="measure" value={ingredientSize}>
                 <option>Tspn</option>
                 <option>Tbsp</option>
                 <option>oz</option>

@@ -20,6 +20,7 @@ export const RecipeEdit =() => {
             ]
             await Promise.all(promises)
                 .then(res => {
+                    console.log(res);
                     setCookbook(res[0]);
                     setIng(res[1]); 
                     setInst(res[2]);
@@ -88,10 +89,10 @@ export const RecipeEdit =() => {
         <div>
         <label>Recipe: </label><input type={'text'} id={'recipe_name'}/>
         <label>Headline: </label><input type={'text'} id={'description'}/>
-        <div id={'dropzone'}><p>Drop files here...</p></div>
-        <button >Testing</button>
+        {/* <div id={'dropzone'}><p>Drop files here...</p></div> */}
+        {/* <button >Testing</button> */}
         <h3>Steps</h3>
-        {/* <Instructions data={_inst}/> */}
+        <Instructions data={_inst}/>
         <h3>Ingredients</h3>
         <Ingredients data={_ing}/>
 

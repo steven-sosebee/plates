@@ -2,20 +2,21 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Step } from "./instruction";
 
-export const Instructions =({instructions})=>{
-    const [l,setL]=useState(instructions);
+export const Instructions =({data=[]})=>{
+    // console.log(instructions);
+    const [l,setL]=useState(data.map(x=>(<Step instruction={x}/>)));
     const {recipe}=useParams();
     
     
-    useEffect(()=>{
-        let lastRow = document.getElementById('instructions').getElementsByTagName('tr');
-        console.log(l.length);
-        if (l.length>0){
-            // console.log(lastRow[lastRow.length - 1]);
-            // l[l.length-1].cells[0].focus();
-            lastRow[lastRow.length - 1].cells[0].focus();
-        }    
-    },[l])
+    // useEffect(()=>{
+    //     let lastRow = document.getElementById('instructions').getElementsByTagName('tr');
+    //     console.log(l.length);
+    //     if (l.length>0){
+    //         // console.log(lastRow[lastRow.length - 1]);
+    //         // l[l.length-1].cells[0].focus();
+    //         lastRow[lastRow.length - 1].cells[0].focus();
+    //     }    
+    // },[l])
     const addStep =(e)=>{
         let _l
         console.log(l.length)

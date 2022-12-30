@@ -1,6 +1,6 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { Meal } from "./meal";
-import { PageDataProvider, usePageDataContext } from "../../context/data";
+// import { PageDataProvider, usePageDataContext } from "../../context/data";
 import { dateCurrTS } from "../../utils";
 import { dbCall } from "../../utils/api";
 import "../../style/index.css";
@@ -10,7 +10,7 @@ export const MealList =()=>{
   let fetchData;
   const [phpRes, setPHPRes] = useState();
   const [meals, setMeals] = useState([]);
-  const {pageData,setPageData}=usePageDataContext();
+  // const {pageData,setPageData}=usePageDataContext();
   
   useEffect(()=>{
     const _headers = {
@@ -23,27 +23,27 @@ export const MealList =()=>{
     })
   },[])
 
-  const submit =()=>{
+  // const submit =()=>{
     
-    const _steps = [...document.querySelectorAll('input')];
-    let x =_steps.map(step=>(
-      step.value
-    ))
-    let _pageData={...pageData};
-    _pageData.steps=x;
-    const body={
-      recipeId:pageData.activeMeal.recipeId,
-      steps:x,
-      category:1
-    };
-    const headers={
-      class:'Step',
-      action:'add'
-    }
-    dbCall(body, headers)
-    // setPageData(_pageData);
-    //console.log(x);
-  }  
+  //   const _steps = [...document.querySelectorAll('input')];
+  //   let x =_steps.map(step=>(
+  //     step.value
+  //   ))
+  //   let _pageData={...pageData};
+  //   _pageData.steps=x;
+  //   const body={
+  //     recipeId:pageData.activeMeal.recipeId,
+  //     steps:x,
+  //     category:1
+  //   };
+  //   const headers={
+  //     class:'Step',
+  //     action:'add'
+  //   }
+  //   dbCall(body, headers)
+  //   // setPageData(_pageData);
+  //   //console.log(x);
+  // }  
   
   const handleDelete= async (e)=>{
     const _list = [...meals];
