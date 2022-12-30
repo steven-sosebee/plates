@@ -34,8 +34,23 @@ class Base {
         echo json_encode($res);
     }
 
-    private function bindParams(){
-        
+    public function insertInto ($fields){
+        $fields = implode(',',$this->fields);
+        $values = '?';
+        for ($i=1; $i<$this->fields.sizeof(); $i++){
+            $values = $values.',?';
+        }
+    }
+    
+    public function prepare(){
+        $this->stmt=$this->connection->prepare($this->sql);
+    }
+    public function execute(){
+        $this->stmt->execute();
+    }
+    public function response(){
+        $this->res['affected rows'] = $this->stmt->affected_rows;
+        echo json_encode($this->res);
     }
 }
 ?>

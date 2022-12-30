@@ -9,8 +9,8 @@
     $model['Ingredient'] = new Ingredient;
     $model["Test"] = new Base;
     $model["Step"] = new Step;
-    // $model["Grocery"] = new Grocery;
-
+    $model["Grocery"] = new Grocery;
+    $model["ShoppingListItem"] = new ShoppingListItems;
 
 
     

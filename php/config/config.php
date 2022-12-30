@@ -6,8 +6,8 @@
     require MODELS_PATH."recipes.php";
     require MODELS_PATH."ingredients.php";
     require MODELS_PATH."steps.php";
-    // require MODELS_PATH."recipes.php";
-
+    require MODELS_PATH."groceries.php";
+    require MODELS_PATH."shoppingListItems.php";
     $params= json_decode(file_get_contents("php://input"),true);
     
 // include the base controller file
