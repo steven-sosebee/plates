@@ -15,23 +15,21 @@ export default class Recipe {
     async add(recipeName, headline){
         this.userId = 1;
         const dbFormat = {
-            recipe_name: recipeName,
-            description: headline,
-            userId: this.userId,
-            created_at: this.TS,
-            updated_at:this.TS
+            recipe:[
+                {
+                    name: recipeName,
+                    description: headline,
+                    userId: this.userId
+                }
+        ]
         }
 
         const headers = {
             class: this.class,
             action:'add'
         }
-
+        
         return dbCall(dbFormat,headers)
-            .then(res=>{
-                return res})
-            .catch(err=>console.log(err))
-
     }
 
     async select(recipeId){
@@ -60,6 +58,17 @@ export default class Recipe {
 
     }
 
+    async addToList(recipeId){
+        const body = {
+            recipeId:recipeId
+        }
+        const header = {
+            class:this.class,
+            action:'addToList'
+        }
+        
+        return dbCall(body,header);
+    }
     edit(){
         return this.details
     }

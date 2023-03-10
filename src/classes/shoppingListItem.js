@@ -22,20 +22,19 @@ export default class ShoppingListItems {
             action:"add"
         })
     }
-    async add(items, listId){               
+    async add(items){               
         const body = {
-            items:items,
-            listId:listId
+            item:items
         }
 
         const headers = {
             class:this.class,
             action:"add"
         }
-
+        // return ({headers,body})
         return dbCall(body,headers)
-        .then(data=>{return data})
-        .catch(err=>console.log(err));
+        // .then(data=>{return data})
+        // .catch(err=>console.log(err));
 
     }
     delete(){
@@ -52,16 +51,15 @@ export default class ShoppingListItems {
             .then(res=>(res))
     }
 
-    async select(recipeId){
+    async select(listId){
         const headers={
             class:this.class,
             action:'select'
         }
         const body={
-            id:recipeId
+            id:parseInt(listId)
         }
 
         return dbCall(body,headers)
-            .then(res=>(res))
     }
 }

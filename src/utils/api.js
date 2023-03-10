@@ -17,5 +17,5 @@ export const dbCall = async (body={}, headers)=>{
     )
     .then(res=>res.json())
     .then(data=>{return data})
-    .catch(error=>console.log(error))
+    .catch(error=>{return error})
 };

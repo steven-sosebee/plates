@@ -33,6 +33,27 @@ class Ingredient extends Base {
         echo json_encode($res);
     }
 
+    public function select2($params){
+        $this->sql="SELECT DISTINCT ingredientName FROM tblIngredients i 
+            LEFT JOIN tblGroceries g ON i.ingredientName=g.groceryName 
+            WHERE i.recipeId=? AND g.groceryName IS NULL";
+        $stmt = $this->connection->prepare($this->sql);
+        $stmt->bind_param("i",$params['recipeId']);
+        $stmt->execute();
+        $res = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+        return $res;
+    }
+
+    public function addToGroceryTbl($groceryName, $groceryMeasure, $groceryPrice){
+        $groceries = (object)[
+            'groceryName' => $groceryName,
+            'groceryPrice' => $groceryPrice,
+            'groceryMeasure' => $groceryMeasure
+        ];
+        $params['groceries'] = $groceries;
+        $grocery = (new Grocery)->add($grocery);
+    }
+
     public function delete($params){
         $sql = "DELETE FROM $this->tbl WHERE ingredientsId=?";
         try{

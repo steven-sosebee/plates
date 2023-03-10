@@ -6,6 +6,7 @@
         public function __construct(){
             parent::__construct();
             $this->tbl='recipe';
+
         }
         public function add($params){
             $userId=1;
@@ -38,6 +39,13 @@
             $stmt->execute();
             $res = $stmt->affected_rows;
             echo json_encode($res);
+        }
+
+        public function addToList($params){
+            $ingredients = (new Ingredient)->select2($params);
+            // $this->res = $ingredients;
+            // $this->response();
+            echo json_encode($ingredients);
         }
     }
     

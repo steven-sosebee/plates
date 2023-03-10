@@ -4,10 +4,12 @@
     define("MODELS_PATH", __DIR__."/../models/");
     require MODELS_PATH."baseModel.php";
     require MODELS_PATH."recipes.php";
+    require MODELS_PATH."recipes2.php";
     require MODELS_PATH."ingredients.php";
     require MODELS_PATH."steps.php";
     require MODELS_PATH."groceries.php";
     require MODELS_PATH."shoppingListItems.php";
+    require MODELS_PATH."shoppingLists.php";
     $params= json_decode(file_get_contents("php://input"),true);
     
 // include the base controller file
