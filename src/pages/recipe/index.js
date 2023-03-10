@@ -25,6 +25,11 @@ export const RecipePage=()=>{
     const handleEdit =()=>{
         window.location.href = `/recipe/edit/${recipe}`;
     }
+    const addToList = async () => {
+        // console.log(_ing);
+        const r = await new Recipe().addToList(recipe);
+        console.log(r);
+    }
     useEffect(()=>{
         const getData = async ()=>{
             const promises = [
@@ -52,6 +57,7 @@ export const RecipePage=()=>{
     return(
         <>
         <div>Recipe Name: <span>{cookbook[0].recipe_name}</span></div>
+        <button onClick={addToList}>Add to shopping list</button>
         <Ingredients ingredients={_ing}/>
         <Instructions steps={_inst}/>
         <button onClick={handleEdit}>Edit Recipe</button>
