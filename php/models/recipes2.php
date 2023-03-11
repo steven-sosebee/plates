@@ -1,6 +1,6 @@
 <?php
 
-class Recipe2 extends Base {
+class Recipe2 extends Base2 {
     protected $tbl;
 
     public function __construct(){
@@ -9,74 +9,43 @@ class Recipe2 extends Base {
         $this->fields=[
             'name',
             'description',
-            'created_date',
-            'created_at',
-            'modified_at',
             'userId'
         ];
-        $this->idField='id';  
+        $this->sqlFields = implode(',',$this->fields);
+        $this->idField='id';
+        $this->sql = "SELECT $this->sqlFields FROM $this->tbl";
     }
 
     public function add($params){
-        $this->fields=[
-            'name',
-            'description',
-            'userId'        
-        ];
-
-        $this->fieldTypes='ssi';
-
+        $this->items = $params['recipes'];
         try{
         $this->insertInto();
-
-        $this->stmt->bind_param(
-            $this->fieldTypes,
-            $name,
-            $description,
-            $userId
-        );
-
-        foreach($params['recipe'] as $item){
-            $name = $item['name'];
-            $userId = $item['userId'];
-            $description = $item['description'];
-
-            $this->executeInsert();
-        }
-
         $this->response();
         }
         catch (Exception $e){
             $this->res['error'] = $e->getMessage();
         }
     }
-     // public function addConstruct(){
-    //     // add variables...
-    //     $this->addFields=[
-    //         'recipe_name',
-    //         'description',
-    //         'userId'        ];
 
-    //     $this->addFieldTypes='ssi';
-    //     $this->bindParams = (array)[
-    //         $recipe_name,
-    //         $description,
-    //         $recipeUser
-    //     ];
-    //     $this->addStmt->bind_param(
-    //         $this->addFieldTypes,
-    //         $recipe_name,
-    //         $description,
-    //         $recipeUser
-    //     );
-    //     $this->addArray = $params['recipes'];
+    public function list($params){
+        // $this->fields = implode(',',$this->sqlFields);
+        $this->addResponse('data',$this->runQuery());
+        // $this->addResponse("connection",true);
+            // $this->addResponse('PDO',$this->PDOConn->getAttribute("PDO::ATTR_ERRMODE"));
+        $this->response();
 
-    //     foreach($this->addArray as $item){
-    //         $name = $item['name'];
-    //         $userId = $item['userId'];
-    //         $description = $item['description'];
+    }
 
-    //     }
-    // }
+    public function select($params){
+        $this->sql = "$this->sql WHERE id = {$params['recipe']['id']}";
+        $this->addResponse('data',$this->runQuery());
+        $this->response();
+    }
+
+    public function delete($params){
+        $this->id = $params['recipe']['id'];
+        $this->addResponse('data',$this->deleteFrom());
+        $this->response();
+    }
 }
 ?>

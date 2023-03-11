@@ -4,58 +4,44 @@ export default class Recipe {
     constructor() {
         this.TS = dateCurrTS();
         this.class = 'Recipe';
+        this.header = {
+            class: this.class
+        };
+        this.body = {};
     }
 
-    async call(body, header){
-        console.log(body)
-        return dbCall(body, header)
-            .then(res=> (res))
-            .catch(err=>console.log(err))
-    }
-    async add(recipeName, headline){
-        this.userId = 1;
-        const dbFormat = {
-            recipe:[
-                {
-                    name: recipeName,
-                    description: headline,
-                    userId: this.userId
-                }
-        ]
-        }
+    // async call(body, header){
+    //     console.log(body)
+    //     return dbCall(body, header)
+    //         .then(res=> (res))
+    //         .catch(err=>console.log(err))
+    // }
 
-        const headers = {
-            class: this.class,
-            action:'add'
+    async list(){
+        this.header.action = 'list';
+        return dbCall({},this.header)
+    }
+    async add(recipes){
+        this.body.recipes =  recipes;
+
+        if(!Array.isArray(recipes)){
+            this.body.recipes=[recipes];
         }
-        
-        return dbCall(dbFormat,headers)
+        console.log({b: this.body, h:this.header})
+        this.header.action='add';        
+        return dbCall(this.body,this.header)
     }
 
     async select(recipeId){
-        const headers = {
-            class: this.class,
-            action:'select'
-        }
-        const body ={
-            id: recipeId
-        }
-        return dbCall(body, headers)
-                .then(res=> (res))
-                .catch(err=>console.log(err))
+        this.header.action = 'select';
+        this.body.recipe = {id:parseInt(recipeId)};
+        return dbCall(this.body, this.header)
     }
 
     async delete(recipeId){
-        const body = {
-            recipeId:recipeId
-        }
-        const header = {
-            class:this.class,
-            action:'delete'
-        }
-        console.log({body,header})
-        return this.call(body,header);
-
+        this.header.action = 'delete';
+        this.body.recipe = {id:parseInt(recipeId)};
+        return dbCall(this.body, this.header)
     }
 
     async addToList(recipeId){

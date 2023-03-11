@@ -14,6 +14,13 @@ class ShoppingList extends Base {
             'list_name'
         ];
         $this->idField='id';
+        $this->displayFields = [
+            'created_at',
+            'modified_at',
+            'user_id',
+            'status',
+            'list_name'
+        ];
     }
 
     public function add($params){

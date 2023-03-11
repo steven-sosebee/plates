@@ -41,6 +41,7 @@ class Base {
     }
     
     public function listAll(){
+        $this->displayFields = implode(',',$this->displayFields);
         $this->sql="SELECT $this->displayFields FROM $this->tbl";
         $this->res = $this->runQuery();
         $this->response();

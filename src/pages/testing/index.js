@@ -12,9 +12,19 @@ export const Testing =() => {
     const recipeDesc = useRef();
 
     const testRecipeAdd = async () => {
+        const recipes = [
+            {
+                name: recipeName.current.value,
+                description: recipeDesc.current.value
+            },
+            {
+                name: `${recipeName.current.value} - new`,
+                description: recipeDesc.current.value
+            }
+        ]
+        
         const res = await new Recipe().add(
-            recipeName.current.value,
-            recipeDesc.current.value
+        recipes
         )
         console.log(res);
     }
@@ -37,14 +47,27 @@ export const Testing =() => {
         console.log(items);
         if (items.data.length==0){return setListItems("No items found...")}
         setListItems(items.data);
+    }
 
-    }
-    const testDelete = async (e) => {
-        console.log(`Deleting list ${e.target.getAttribute('data-list-name')}`);
-        const res = await new ShoppingList().delete(e.target.getAttribute('data-list-name'))
+    const testGetList = async(e) => {
+        const res = await new Recipe().list();
         console.log(res);
-        listAll();
     }
+    const testSelect = async(e) => {
+        const res = await new Recipe().list(101);
+        console.log(res);
+    }
+
+    const testDelete = async(e) => {
+        const res = await new Recipe().delete(recipeName.current.value);
+        console.log(res);
+    }
+    // const testDelete = async (e) => {
+    //     console.log(`Deleting list ${e.target.getAttribute('data-list-name')}`);
+    //     const res = await new ShoppingList().delete(e.target.getAttribute('data-list-name'))
+    //     console.log(res);
+    //     listAll();
+    // }
     const listAll = async () => {
         const res = await new ShoppingList().list();
         setData(res);
@@ -86,6 +109,9 @@ export const Testing =() => {
                 <label>Recipe Name</label><input ref={recipeName}></input>
                 <label>Description</label><input ref={recipeDesc}></input>
                 <button onClick={testRecipeAdd}>Recipe</button>
+                <button onClick={testSelect}>Get Recipe</button>
+                <button onClick={testGetList}>Get List</button>
+                <button onClick={testDelete}>Delete Recipe</button>
             </div>
         </div>
         

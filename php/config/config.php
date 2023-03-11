@@ -3,6 +3,7 @@
     define("PROJECT_ROOT_PATH", __DIR__ . "/../../");
     define("MODELS_PATH", __DIR__."/../models/");
     require MODELS_PATH."baseModel.php";
+    require MODELS_PATH."baseModel2.php";
     require MODELS_PATH."recipes.php";
     require MODELS_PATH."recipes2.php";
     require MODELS_PATH."ingredients.php";
