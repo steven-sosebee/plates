@@ -39,9 +39,9 @@ export const RecipePage=()=>{
             ]
             Promise.all(promises)
                 .then(res => {
-                    setCookbook(res[0]);
-                    setIng(res[1]); 
-                    setInst(res[2]);
+                    setCookbook(res[0].data);
+                    setIng(res[1].data); 
+                    setInst(res[2].data);
                     setLoading(false);
                 })
         }
@@ -56,7 +56,7 @@ export const RecipePage=()=>{
     }
     return(
         <>
-        <div>Recipe Name: <span>{cookbook[0].recipe_name}</span></div>
+        <div>Recipe Name: <span>{cookbook[0].name}</span></div>
         <button onClick={addToList}>Add to shopping list</button>
         <Ingredients ingredients={_ing}/>
         <Instructions steps={_inst}/>

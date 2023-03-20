@@ -12,42 +12,19 @@ export const MealList =()=>{
   const [meals, setMeals] = useState([]);
   // const {pageData,setPageData}=usePageDataContext();
   
+  const listAll = async () => {
+    const res = await new Recipe().list();
+    console.log(res);
+    setMeals(res.data);
+  }
+
   useEffect(()=>{
-    const _headers = {
-      class:'Recipe',
-      action:'list'
-    }
-    dbCall([],_headers)
-    .then(fetchData =>{
-      setMeals(fetchData);
-    })
+    listAll();
   },[])
 
-  // const submit =()=>{
-    
-  //   const _steps = [...document.querySelectorAll('input')];
-  //   let x =_steps.map(step=>(
-  //     step.value
-  //   ))
-  //   let _pageData={...pageData};
-  //   _pageData.steps=x;
-  //   const body={
-  //     recipeId:pageData.activeMeal.recipeId,
-  //     steps:x,
-  //     category:1
-  //   };
-  //   const headers={
-  //     class:'Step',
-  //     action:'add'
-  //   }
-  //   dbCall(body, headers)
-  //   // setPageData(_pageData);
-  //   //console.log(x);
-  // }  
-  
   const handleDelete= async (e)=>{
     const _list = [...meals];
-    const idx = _list.findIndex(x=>x.recipeId==e.target.id);
+    const idx = _list.findIndex(x=>x.id==e.target.id);
     _list.splice(idx,1);
     setMeals(_list);
     e.preventDefault();
@@ -60,7 +37,7 @@ export const MealList =()=>{
     <>
     <ul>
       {meals.map(x=>(
-        <li><Meal meal={x}/><button id={x.recipeId} onClick={handleDelete}>Delete</button></li>
+        <li><Meal meal={x}/><button id={x.id} onClick={handleDelete}>Delete</button></li>
       ))}
     </ul>
     <div className="flex">

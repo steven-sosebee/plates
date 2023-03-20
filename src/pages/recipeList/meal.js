@@ -18,8 +18,8 @@ export const Meal =({meal, returnData})=>{
     };
 
     return (
-        <li id={meal.recipeId} key={meal.recipeId}>
-            <a href={`/recipe/${meal.recipeId}`}>{meal.recipe_name} - uploaded at: {meal.created_at}</a>
+        <li id={meal.id} key={meal.id}>
+            <a href={`/recipe/${meal.id}`}>{meal.name} - uploaded at: {meal.created_at}</a>
         </li>
     )
 }
