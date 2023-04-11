@@ -5,7 +5,7 @@ export default class Base {
 
     }
 
-    async db (){
+    async call (){
         
     }
 }

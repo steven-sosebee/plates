@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import ShoppingListItems from "../../classes/shoppingListItem"
 import ShoppingList from "../../classes/shoppingList";
 import { Recipe } from "../../classes";
+import Grocery2 from "../../classes/grocery2";
 
 export const Testing =() => {
     const listItem = useRef();
@@ -72,8 +73,13 @@ export const Testing =() => {
         const res = await new ShoppingList().list();
         setData(res);
     }
+
+    const newConn = async () => {
+        const res = await new Grocery2().test();
+        console.log(res);
+    }
     useEffect(()=>{
-        listAll();
+        // listAll();
     },[])
 
     const itemList = () => {
@@ -95,6 +101,7 @@ export const Testing =() => {
             <label>ListId</label><input ref = {listId} id="listId"></input>
 
             <button onClick={()=>{testAdd()}}>Test</button>
+            <button onClick={()=>{newConn()}}>New Conn Test</button>
             <table>
                 {data.map(x=>
                     <tr>

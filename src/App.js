@@ -14,7 +14,7 @@ import {
 import {Meal, IngredientAdd} from "./components/";
 import { dbCall } from "./utils/api";
 import { MealAdd } from "./pages/addRecipes";
-import { MealList, HomePage, AddGrocery, Testing, Styles } from "./pages";
+import { MealList, HomePage, AddGrocery, Testing, Styles, BreadCalc } from "./pages";
 import { PageDataProvider } from "./context/data";
 import { RecipePage } from "./pages/recipe";
 import { RecipeEdit } from "./pages/editRecipe";
@@ -31,7 +31,9 @@ function App() {
         <NavLink to={"/recipe/add"}>Add Recipe</NavLink>
         <NavLink to={"/groceries/add"}>Add Groceries</NavLink>
         <NavLink to={"/shoppingList"}>Shopping List</NavLink>
+        <NavLink to={"/bread"}>Bread Calculator</NavLink>
         <Routes>
+          <Route path="/bread" element={<BreadCalc/>}/>
           <Route path="/recipe/add" element={<MealAdd/>}/>
           <Route path="/shoppingList" element={<ShoppingList/>}/>
           <Route path="/list" element={<MealList/>}/>

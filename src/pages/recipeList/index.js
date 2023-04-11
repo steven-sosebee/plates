@@ -29,15 +29,24 @@ export const MealList =()=>{
     setMeals(_list);
     e.preventDefault();
     console.log(parseInt(e.target.id));
-    const res = await new Recipe().delete(parseInt(e.target.id));
+    // const res = await new Recipe().delete(parseInt(e.target.id));
+    const res = await new Recipe().select(parseInt(e.target.id));
     console.log(res);
   };
 
+    const handleGrocery = async (e) =>{
+      const id = parseInt(e.target.id);
+      const res = await new Recipe().grocery(id);
+      console.log(res);
+    }
   return (
     <>
     <ul>
       {meals.map(x=>(
-        <li><Meal meal={x}/><button id={x.id} onClick={handleDelete}>Delete</button></li>
+        <li><Meal meal={x}/>
+          <button id={x.id} onClick={handleDelete}>Delete</button>
+          <button id={x.id} onClick={handleGrocery}>Add to Grocery List</button>
+          </li>
       ))}
     </ul>
     <div className="flex">

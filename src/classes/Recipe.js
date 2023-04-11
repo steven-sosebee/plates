@@ -3,7 +3,7 @@ import { dateCurrTS, dbCall } from "../utils";
 export default class Recipe {
     constructor() {
         this.TS = dateCurrTS();
-        this.class = 'Recipe';
+        this.class = 'Recipe2';
         this.header = {
             class: this.class
         };
@@ -19,7 +19,8 @@ export default class Recipe {
 
     async list(){
         this.header.action = 'list';
-        return dbCall({},this.header)
+        return dbCall({},this.header);
+        
     }
     async add(recipes){
         this.body.recipes =  recipes;
@@ -52,9 +53,24 @@ export default class Recipe {
             class:this.class,
             action:'addToList'
         }
-        
+    
         return dbCall(body,header);
     }
+
+    async test(){
+        this.header.class = 'Grocery2';
+        this.body.action = 'test';
+
+        return dbCall(this.body, this.header);
+    }
+    async grocery(recipeId){
+        this.header.action = 'grocery';
+        this.body.recipe = {
+            id:recipeId
+        }
+        return dbCall(this.body,this.header)
+    }
+
     edit(){
         return this.details
     }
