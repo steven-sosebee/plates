@@ -6,7 +6,8 @@
 /tmp
 /.pnp
 .pnp.js
-
+/private
+config.ini
 # testing
 /coverage
 /php/archive
