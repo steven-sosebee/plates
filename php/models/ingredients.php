@@ -1,11 +1,21 @@
 <?php
 
-class Ingredient extends Base {
+class Ingredient extends Base2 {
     protected $tbl;
 
-    public function __construct(){
+    public function __construct($params){
         parent::__construct();
         $this->tbl='tblIngredients';
+        $this->params = $params;
+        $this->fields=[
+            'ingredientName', 
+            'ingredientSizeQty', 
+            'ingredientSize', 
+            'recipeId'
+        ];
+        $this->sqlFields = implode(',',$this->fields);
+        $this->idField='id';
+        $this->sql = "SELECT $this->sqlFields FROM $this->tbl";
     }
 
     public function list(){
@@ -13,6 +23,11 @@ class Ingredient extends Base {
         echo json_encode($this->runQuery());
     }
 
+    public function test(){
+        $this->sql = "SELECT * FROM tblIngredients";
+        $this->data = $this->runQuery();
+        return $this->data;
+    }
     public function add($params){
             $sql="INSERT INTO $this->tbl (ingredientName, ingredientSizeQty, ingredientSize, recipeId) VALUES (?,?,?,?)";
             $stmt = $this->connection->prepare($sql);
@@ -24,13 +39,19 @@ class Ingredient extends Base {
             echo json_encode($res);
     }
     
-    public function select($params){
+    public function select(){
         $this->sql="SELECT * from $this->tbl WHERE recipeId=?";
-        $stmt = $this->connection->prepare($this->sql);
-        $stmt->bind_param("i",$params['id']);
-        $stmt->execute();
-        $res = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
-        echo json_encode($res);
+        $this->execParams = [$this->params['id']];
+        // $stmt = $this->connection->prepare($this->sql);
+        // $stmt->bind_param("i",$params['id']);
+        // $stmt->execute();
+        // $res = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+        // echo json_encode($res);
+        // return $this->execParams;
+        // $this->addResponse('data',$this->runQuery());
+        $this->runQuery();
+        // $this->response();
+        return $this;
     }
 
     public function select2($params){
@@ -43,7 +64,17 @@ class Ingredient extends Base {
         $res = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
         return $res;
     }
-
+    public function g($id){
+        $this->id=$id;
+        $this->sql="SELECT * from $this->tbl  WHERE recipeId=?";
+        $this->addResponse('iID', $this->id);
+        $this->execParams = array($this->id);
+        $this->addResponse('data', $this->runQuery());
+        $this->addResponse('complete', true);
+        // $this->addResponse('config', config);
+        return $this->response;
+    }
+    
     public function addToGroceryTbl($groceryName, $groceryMeasure, $groceryPrice){
         $groceries = (object)[
             'groceryName' => $groceryName,

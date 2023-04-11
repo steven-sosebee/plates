@@ -1,44 +1,43 @@
 <?php
-
-class Base2 {
-    protected $db_host;
-    protected $db_userName;
-    protected $db_password;
-    protected $db;
+require_once __DIR__ . "/../index.php";
+class Base2 extends Utility {
     protected $query;
+    protected $table;
+    protected $sql;
+    protected $stmt;
+    protected $execParams;
+    protected $tbl;
+    protected $fields;
+    protected $sqlFields;
+    protected $affected_rows;
+    protected $idField;
+    protected $params;
 
-    // initialize the new object.
+// initialize the new object.
     function __construct(){
-        $this->response = (array)[];
-        $this->_connect('box5934.bluehost.com:3306', 'steveqv1_root', 'walrus', 'steveqv1_cookbook');
+        // $this->response = (array)[];
+        $this->execParams=(array)[];
+        // $this->params=$params;
         // $this->values = '?';
-        
         $this->affected_rows=0;
+        
+        // $this->testing();
+
     }
-    // standard connectivity
-    public function _connect($db_host,$db_userName,$db_password,$db){
-        $this->db_host=$db_host;
-        $this->db_userName=$db_userName;
-        $this->db_password=$db_password;
-        $this->db=$db;
-        try{
-            $this->connection=mysqli_connect($this->db_host, $this->db_userName, $this->db_password,$this->db);
-            try{
-            $this->PDOConn= new PDO("mysql:host=box5934.bluehost.com;port=3306;dbname=steveqv1_cookbook", $this->db_userName, $this->db_password,
-                array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
-            $this->addResponse("connection",true);
-            } catch (PDOException $e) {
-                $this->addResponse('Connection failed',$e->getMessage());
-            // $this->addResponse('PDO',$this->PDOConn->getAttribute("PDO::ATTR_SERVER_INFO"));
-        }}
-        catch( Exception $e){
-            $this->errorOut($e->getMessage());
-        }
-    }
-    // close connection to DB.  TODO add more code for error monitoring.
-    public function disconnect(){
-        mysqli_close($this->connection);
-    }
+    // function __destruct(){
+    //     return $this->response;
+    // }
+    // function testing ($class,$action) {
+    //     $this->params = $params;
+    //     $this->model = new $class;
+    //     $this->data = $class;
+    //     $this->action = $action;
+    //     $this->addResponse('data',($this->model));
+    //     $this->addResponse('params',$this->params);
+    //     $this->model->{$action}();
+    //     $this->response();
+
+    // }
 
     public function placeholders(){
         $p = array();
@@ -52,11 +51,9 @@ class Base2 {
     // standard function to return data from the DB.  Sends info to parent function.
     public function runQuery(){
         try{
-            // return $this->connection->query($this->sql)->fetch_all(MYSQLI_ASSOC);
-            $this->stmt=$this->PDOConn->prepare('SELECT * FROM tblRecipes');
-            $this->addResponse("stmt",$this->stmt);
-            $this->stmt->execute();
-            return $this->stmt->fetchAll(PDO::FETCH_ASSOC);
+            $this->stmt=CONN->PDOConn->prepare($this->sql);
+            $this->stmt->execute($this->execParams);    
+            $this->data = $this->stmt->fetchAll(PDO::FETCH_ASSOC);
         }
         catch( Exception $e){
             $this->addResponse('error', $e->getMessage());
@@ -90,27 +87,17 @@ class Base2 {
         };
     }
     
-    // standard DELETE function.  Sends info to parent function.
+// standard DELETE function.  Sends info to parent function.
     public function deleteFrom(){
         $this->sql = "DELETE FROM $this->tbl WHERE id = ?";
         try{
-        $this->stmt = $this->connection->prepare($this->sql);
+        $this->stmt = CONN->PDOConn->prepare($this->sql);
         $this->stmt->execute([$this->id]);
-        $this->affected_rows = $this->affected_rows + $this->stmt->affected_rows;
+        $this->affected_rows = $this->affected_rows + $this->stmt->rowCount();
         $this->addResponse('Message',"{$this->affected_rows} record(s) sucessfully deleted");
         } catch( Exception $e){
             $this->errorOut($e->getMessage());
         };
-    }
-
-    public function errorOut($err){
-        $this->addResponse('Error', $err);
-    }
-
-    public function response(){
-        echo json_encode($this->response);
-        $this->disconnect();
-    }
-        
+    }        
 }
 ?>
