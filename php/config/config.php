@@ -15,8 +15,8 @@
     require MODELS_PATH."baseModel2.php";
     require MODELS_PATH."recipes.php";
     require MODELS_PATH."recipes2.php";
-    require MODELS_PATH."ingredients.php";
-    require MODELS_PATH."steps.php";
+    require MODELS_PATH."ingredients2.php";
+    require MODELS_PATH."steps2.php";
     require MODELS_PATH."groceries.php";
     require MODELS_PATH."groceries2.php";
     require MODELS_PATH."shoppingListItems.php";
@@ -25,13 +25,5 @@
     $params= json_decode(file_get_contents("php://input"),true);
     $model = $_SERVER['HTTP_CLASS'];
     $action = $_SERVER['HTTP_ACTION'];
-    // $params['config'] = $config;
-// include the base controller file
-// require_once PROJECT_ROOT_PATH . "/php/Controller/Api/BaseController.php";
- 
-// include the use model file
-// require_once PROJECT_ROOT_PATH . "/php/Model/user.php";
 
-
-// define("JWT_KEY","asdlkjeijghgpwoen0304928484h9492");
 ?>

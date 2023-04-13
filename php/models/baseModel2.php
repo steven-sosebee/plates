@@ -12,37 +12,20 @@ class Base2 extends Utility {
     protected $affected_rows;
     protected $idField;
     protected $params;
-
+    protected $addFields;
+    protected $deleteSQL;
+    
 // initialize the new object.
     function __construct(){
-        // $this->response = (array)[];
         $this->execParams=(array)[];
-        // $this->params=$params;
-        // $this->values = '?';
         $this->affected_rows=0;
-        
-        // $this->testing();
-
+        $this->deleteSQL = "DELETE FROM $this->tbl WHERE id = ?";
     }
-    // function __destruct(){
-    //     return $this->response;
-    // }
-    // function testing ($class,$action) {
-    //     $this->params = $params;
-    //     $this->model = new $class;
-    //     $this->data = $class;
-    //     $this->action = $action;
-    //     $this->addResponse('data',($this->model));
-    //     $this->addResponse('params',$this->params);
-    //     $this->model->{$action}();
-    //     $this->response();
-
-    // }
 
     public function placeholders(){
         $p = array();
-        if (sizeof(array_keys($this->items[0]))>1){
-        for ($i=0; $i<sizeof(array_keys($this->items[0])); $i++){
+        if (sizeof(array_keys($this->params[0]))>1){
+        for ($i=0; $i<sizeof(array_keys($this->params[0])); $i++){
             $p[]='?';
         };
         return implode(',',$p);
@@ -67,20 +50,19 @@ class Base2 extends Utility {
     // standard INSERT function.  Sends info to parent function.
     public function insertInto (){
         try{
-            $this->values=$this->placeholders();
-            $this->addFields = implode(',', array_keys($this->items[0]));  
-            $this->sql = "INSERT INTO $this->tbl ($this->addFields) VALUES ($this->values)";
-            // $this->res['SQL'] = $this->sql;
-            $this->stmt=$this->connection->prepare($this->sql);
+            $values=$this->placeholders();
+            $addFields = implode(',', array_keys($this->params[0]));  
+            $this->sql = "INSERT INTO $this->tbl ($addFields) VALUES ($values)";
+            $this->stmt=CONN->PDOConn->prepare($this->sql);
             $newIDs = array();
 
-            foreach($this->items as $item){
+            foreach($this->params as $item){
                 $this->stmt->execute(array_values($item));
-                $this->affected_rows = $this->affected_rows + $this->stmt->affected_rows;
-                $newIDs[] = mysqli_insert_id($this->connection);
+                $this->affected_rows = $this->affected_rows + $this->stmt->rowCount();
+                $this->newIDs[] = CONN->PDOConn->lastInsertId();
             }
-            $this->addResponse('ID',$newIDs);
-            $this->addResponse('Message',"{$this->affected_rows} record(s) sucessfully added");
+            // $this->addResponse('ID',$newIDs);
+            $this->message = "{$this->affected_rows} record(s) sucessfully added";
         }
         catch( Exception $e){
             $this->errorOut($e->getMessage());
@@ -88,13 +70,12 @@ class Base2 extends Utility {
     }
     
 // standard DELETE function.  Sends info to parent function.
-    public function deleteFrom(){
-        $this->sql = "DELETE FROM $this->tbl WHERE id = ?";
+    public function deleteFrom($id){
         try{
-        $this->stmt = CONN->PDOConn->prepare($this->sql);
-        $this->stmt->execute([$this->id]);
+        $this->stmt = CONN->PDOConn->prepare($this->deleteSQL);
+        $this->stmt->execute([$id]);
         $this->affected_rows = $this->affected_rows + $this->stmt->rowCount();
-        $this->addResponse('Message',"{$this->affected_rows} record(s) sucessfully deleted");
+        $this->message = "{$this->affected_rows} record(s) sucessfully deleted";
         } catch( Exception $e){
             $this->errorOut($e->getMessage());
         };

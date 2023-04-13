@@ -1,6 +1,6 @@
 <?php
 
-class Recipe2 extends Base2 {
+class Step2 extends Base2 {
     protected $tbl;
     protected $fields;
     protected $sqlFields;
@@ -9,17 +9,24 @@ class Recipe2 extends Base2 {
 
     public function __construct($params){
         parent::__construct();
-        $this->tbl='tblRecipes';
+        $this->tbl='tblSteps';
         $this->params = $params;
         $this->fields=[
             'id',
-            'name',
-            'description',
-            'userId'
+            'stepOrder',
+            'stepDescription',
+            'stepCategory',
+            'recipeId',
+            'stepTitle',
+            'stepMinutes'
         ];
         $this->addFields=[
-            'name',
-            'description'
+            'stepOrder',
+            'stepDescription',
+            'stepCategory',
+            'recipeId',
+            'stepTitle',
+            'stepMinutes'
         ];
         $this->sqlFields = implode(',',$this->fields);
         $this->idField='id';
@@ -51,10 +58,14 @@ class Recipe2 extends Base2 {
     }
 
     public function delete(){
-        $this->deleteSQL = "DELETE FROM $this->tbl WHERE id = ?";
         $id = $this->params['params']['id'];
-        $this->ingredients = (new Ingredient2($id))->recipeDelete();
-        $this->instructions = (new Step2($id))->recipeDelete();
+        $this->deleteFrom($id);
+        return $this;
+    }
+
+    public function recipeDelete(){
+        $this->deleteSQL = "DELETE FROM $this->tbl WHERE recipeId = ?";
+        $id = $this->params;
         $this->deleteFrom($id);
         return $this;
     }
