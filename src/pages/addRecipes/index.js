@@ -28,31 +28,33 @@ export const MealAdd =() => {
             document.getElementById('description').value
         ];
 
+        const _recipe = await new Recipe().add({
+            name: document.getElementById('recipe_name').value,
+            description: document.getElementById('description').value
+        });
+
         const instructions = [...document.getElementById('instructions').rows].map((x,i)=>({
             stepTitle: getValue(x.cells[0]), 
-            category: parseInt(getValue(x.cells[1])), 
-            stepMinutes:parseInt(getValue(x.cells[3])),
-            description: getValue(x.cells[2]),
+            stepCategory: parseInt(getValue(x.cells[1])), 
+            stepMinutes:parseInt(getValue(x.cells[3])) || 0,
+            stepDescription: getValue(x.cells[2]),
+            recipeId: _recipe.newIDs[0],
             stepOrder: i + 1}));
         
         const ingredients = [...document.getElementById('ingredients').rows].map((x,i)=>({
             ingredientName:getValue(x.cells[0]),
             ingredientSizeQty:getValue(x.cells[1]),
+            recipeId: _recipe.newIDs[0],
             ingredientSize:getValue(x.cells[2]) 
         }));
         
-        const _recipe = await new Recipe().add(
-            document.getElementById('recipe_name').value,
-            document.getElementById('description').value
-        );
+        const _inst = await new Instruction().add(instructions);
         
-        const _inst = await new Instruction().add(instructions,_recipe.id);
+        const _ing = await new Ingredient().add(ingredients)
         
-        const _ing = await new Ingredient().add(ingredients,_recipe.id)
-        
-        console.log([_recipe,_inst,_ing]);
-
-        window.location.href = `/recipe/${_recipe.id}`;
+        // console.log([_recipe,_inst,_ing]);
+        console.log(_recipe, _ing, _inst);
+        // window.location.href = `/recipe/${_recipe.id}`;
 
     }
 

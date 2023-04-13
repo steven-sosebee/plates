@@ -2,42 +2,23 @@ import { dateCurrTS, dbCall } from "../utils";
 
 export default class Instruction {
     constructor(){
-        this.class = "Step";
+        this.TS = dateCurrTS();
+        this.class = 'Step2';
+        this.header = {
+            class: this.class
+        };
+        this.body = {};
     }
     // add(title,category,description,stepMinutes,order, recipeId){               
-    add(instructions,recipeId){
-        // let body;
-        // console.log(instructions);
+    async add(instructions){
+        this.body =  instructions;
 
-        
-        // const _inst = {
-        //     category: parseInt(category),
-        //     stepMinutes: parseInt(stepMinutes),
-        //     description: description,
-        //     stepTitle: title};
-        
-        // console.log(_inst);
-        // body = {
-        //     category: parseInt(category),
-        //     stepMinutes: parseInt(stepMinutes),
-        //     description: description,
-        //     stepTitle: title,
-        //     stepOrder: order,
-        //     recipeId:recipeId
-        // }
-        const body={
-            instructions:instructions,
-            recipeId:recipeId
+        if(!Array.isArray(instructions)){
+            this.body=[instructions];
         }
-        const headers = {
-            class:this.class,
-            action:"add"
-        }
-        
-        return dbCall(body,headers)
-        .then(data=>{return data})
-        .catch(err=>console.log(err));
-
+        // console.log({b: this.body, h:this.header})
+        this.header.action='add';        
+        return dbCall(this.body,this.header)
     }
 
     async list(){

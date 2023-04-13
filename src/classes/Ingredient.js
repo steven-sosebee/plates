@@ -2,7 +2,12 @@ import { dateCurrTS, dbCall } from "../utils";
 
 export default class Ingredient {
     constructor(){
-        this.class = 'Ingredient'
+        this.TS = dateCurrTS();
+        this.class = 'Ingredient2';
+        this.header = {
+            class: this.class
+        };
+        this.body = {};
     }
 
     refresh(){
@@ -10,24 +15,18 @@ export default class Ingredient {
             .then(data=>{return data})
     }
 
-    async add(ingredients, recipeId){               
-        
-        const body = {
-            ingredients:ingredients,
-            recipeId:recipeId
+    async add(ingredient){
+        this.body =  ingredient;
+
+        if(!Array.isArray(ingredient)){
+            this.body=[ingredient];
         }
-
-        const headers = {
-            class:this.class,
-            action:"add"
-        }
-
-        return dbCall(body,headers)
-        .then(data=>{return data})
-        .catch(err=>console.log(err));
-
-    }
-    delete(){
+    
+        this.header.action='add';        
+        return dbCall(this.body,this.header)
+    }    
+    
+    async delete(){
     
     }
 

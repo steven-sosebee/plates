@@ -23,12 +23,12 @@ export default class Recipe {
         
     }
     async add(recipes){
-        this.body.recipes =  recipes;
+        this.body =  recipes;
 
         if(!Array.isArray(recipes)){
-            this.body.recipes=[recipes];
+            this.body=[recipes];
         }
-        console.log({b: this.body, h:this.header})
+        // console.log({b: this.body, h:this.header})
         this.header.action='add';        
         return dbCall(this.body,this.header)
     }
@@ -41,7 +41,7 @@ export default class Recipe {
 
     async delete(recipeId){
         this.header.action = 'delete';
-        this.body.recipe = {id:parseInt(recipeId)};
+        this.body.params = {id:parseInt(recipeId)};
         return dbCall(this.body, this.header)
     }
 

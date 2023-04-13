@@ -30,7 +30,7 @@ export const MealList =()=>{
     e.preventDefault();
     console.log(parseInt(e.target.id));
     // const res = await new Recipe().delete(parseInt(e.target.id));
-    const res = await new Recipe().select(parseInt(e.target.id));
+    const res = await new Recipe().delete(parseInt(e.target.id));
     console.log(res);
   };
 
