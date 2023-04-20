@@ -8,7 +8,12 @@
     define("DB_USER",$config['db_userName']);
     define("DB_PASSWORD",$config['db_password']);
     define("DB_PORT",$config['port']);
-    
+    define("EMAIL_HOST",$config['email_host']);
+    define("EMAIL_FROM",$config['email_from']);
+    define("EMAIL_PASSWORD",$config['email_password']);
+    define("EMAIL_PORT", $config['email_port']);
+
+    // require MODELS_PATH."eMail.php";
     require MODELS_PATH."utility.php";
     require MODELS_PATH."connection.php";
     require MODELS_PATH."baseModel.php";
