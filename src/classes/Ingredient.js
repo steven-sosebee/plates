@@ -26,8 +26,11 @@ export default class Ingredient {
         return dbCall(this.body,this.header)
     }    
     
-    async delete(){
-    
+    async delete(id){
+        this.body.params = {id:id};
+        this.header.action = 'delete';
+        // return this.body;
+        return dbCall(this.body,this.header)
     }
 
     async list(){

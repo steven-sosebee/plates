@@ -35,7 +35,7 @@ export default class Recipe {
 
     async select(recipeId){
         this.header.action = 'select';
-        this.body.recipe = {id:parseInt(recipeId)};
+        this.body = {id:parseInt(recipeId)};
         return dbCall(this.body, this.header)
     }
 
@@ -68,6 +68,16 @@ export default class Recipe {
         this.body.recipe = {
             id:recipeId
         }
+        return dbCall(this.body,this.header)
+    }
+
+    async update(recipes){
+        this.body =  recipes;
+
+        if(!Array.isArray(recipes)){
+            this.body=[recipes];
+        }
+        this.header.action='update';        
         return dbCall(this.body,this.header)
     }
 

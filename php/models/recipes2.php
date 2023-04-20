@@ -1,7 +1,7 @@
 <?php
 
 class Recipe2 extends Base2 {
-    protected $tbl;
+    // protected $tbl;
     protected $fields;
     protected $sqlFields;
     protected $sql;
@@ -44,8 +44,9 @@ class Recipe2 extends Base2 {
 
     public function select(){
         $this->sql = "SELECT * FROM $this->tbl WHERE id = ?";
-        $this->execParams = [$this->params['params']['id']];
-        $this->ingredients = (new Ingredient($this->params['recipe']))->select();
+        $this->execParams = [$this->params['id']];
+        $this->ingredients = (new Ingredient2($this->params))->recipeSelect();
+        $this->instructions = (new Step2($this->params))->recipeSelect();
         $this->runQuery();
         return $this;
     }
@@ -59,6 +60,29 @@ class Recipe2 extends Base2 {
         return $this;
     }
 
+    public function update(){
+        $this->sql = "UPDATE $this->tbl 
+            SET 
+                name = ?, 
+                description = ?
+            WHERE
+                id = ?";
+        
+        $this->stmt=CONN->PDOConn->prepare($this->sql);
+        // $this->test = $this->params;
+            foreach($this->params as $item){
+                $name = $item['name'];
+                $description = $item['description'];
+                $id = $item['id'];        
+                $this->stmt->execute([$name,$description,$id]);
+                $this->affected_rows = $this->affected_rows + $this->stmt->rowCount();
+                $this->ingredients = (new Ingredient2($item['ingredients']))->update();
+                $this->instructions = (new Step2($item['instructions']))->update();
+            }
+            $this->message = "{$this->affected_rows} record(s) sucessfully updated";
+  
+        return $this;
+    }
     public function getIngredients(){
 
     }

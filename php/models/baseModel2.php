@@ -4,22 +4,22 @@ class Base2 extends Utility {
     protected $query;
     protected $table;
     protected $sql;
-    protected $stmt;
+    // protected $stmt;
     protected $execParams;
-    protected $tbl;
+    // protected $tbl;
     protected $fields;
     protected $sqlFields;
     protected $affected_rows;
     protected $idField;
     protected $params;
     protected $addFields;
-    protected $deleteSQL;
+    // protected $deleteSQL;
     
 // initialize the new object.
     function __construct(){
         $this->execParams=(array)[];
         $this->affected_rows=0;
-        $this->deleteSQL = "DELETE FROM $this->tbl WHERE id = ?";
+        $this->deleteSQL = "DELETE FROM {$this->tbl} WHERE id = ?";
     }
 
     public function placeholders(){
@@ -77,7 +77,8 @@ class Base2 extends Utility {
         $this->affected_rows = $this->affected_rows + $this->stmt->rowCount();
         $this->message = "{$this->affected_rows} record(s) sucessfully deleted";
         } catch( Exception $e){
-            $this->errorOut($e->getMessage());
+            $this->error = $e->getMessage();
+            // $this->errorOut($e->getMessage());
         };
     }        
 }
