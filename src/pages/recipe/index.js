@@ -32,18 +32,13 @@ export const RecipePage=()=>{
     }
     useEffect(()=>{
         const getData = async ()=>{
-            const promises = [
-                new Recipe().select(recipe),
-                new Ingredient().select(recipe),
-                new Instruction().select(recipe)
-            ]
-            Promise.all(promises)
-                .then(res => {
-                    setCookbook(res[0].data);
-                    setIng(res[1].data); 
-                    setInst(res[2].data);
-                    setLoading(false);
-                })
+
+            const res = await new Recipe().select(recipe);
+            setCookbook(res.data);
+            setIng(res.ingredients?.data);
+            setInst(res.instructions?.data);
+            setLoading(false);
+            console.log(res);
         }
         
         getData()
@@ -64,3 +59,16 @@ export const RecipePage=()=>{
         </>
     )
 }
+
+            // const promises = [
+            //     new Recipe().select(recipe),
+                // new Ingredient().select(recipe),
+                // new Instruction().select(recipe)
+            // ]
+            // Promise.all(promises)
+            //     .then(res => {
+            //         setCookbook(res[0].data);
+            //         setIng(res[1].data); 
+            //         setInst(res[2].data);
+            //         setLoading(false);
+            //     })

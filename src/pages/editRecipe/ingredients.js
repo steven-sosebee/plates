@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react"
 import { useDnDContext } from "../../context/drag-n-drop";
 import { dbCall } from "../../utils";
-import { Ingredient } from "./ingredient";
+import { IngredientEl } from "./ingredient";
 
 export const Ingredients =({data=[]})=>{
     // console.log(data.map(x=>(<Ingredient ingredient={x}/>)));
-    const [l,setL]=useState(data.map(x=>(<Ingredient ingredient={x}/>)));
+    const [l,setL]=useState(data.map(x=>(<IngredientEl ingredient={x}/>)));
     const {handleDrag, handleDrop, handleDragStart} = useDnDContext();
     // useEffect(()=>{
     //     let lastRow = document.getElementById('ingredients').getElementsByTagName('tr');
@@ -24,9 +24,9 @@ export const Ingredients =({data=[]})=>{
     const addIngredient=()=>{
         let _l
         if (!l) {
-            _l=[<Ingredient/>];
+            _l=[<IngredientEl key={0}/>];
         } else {
-            _l=[...l,<Ingredient/>];
+            _l=[...l,<IngredientEl key={l.length}/>];
         } 
         setL(_l);
     

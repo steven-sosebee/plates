@@ -3,3 +3,7 @@
     grid-auto-flow: column;
     width: 25%;
 }
+
+.text {
+    white-space: break-spaces;
+}

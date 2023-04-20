@@ -10,10 +10,18 @@ export const Instructions = ({steps})=>{
     return (
         <table>
             <thead>
-                <th></th><th>Instruction</th><th>Minutes</th>
+                <th></th>
+                <th>Instruction</th>
+                <th>Minutes</th>
+                <th>Description</th>
             </thead>
             {steps.map((step,i)=>(
-                <tr><td>{i+1}</td><td>{step.stepTitle}</td><td>{step.stepMinutes}</td></tr>
+                <tr>
+                    <td>{i+1}</td>
+                    <td>{step.stepTitle}</td>
+                    <td>{step.stepMinutes}</td>
+                    <td>{step.stepDescription}</td>
+                </tr>
             ))}
         </table>
     )

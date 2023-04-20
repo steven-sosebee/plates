@@ -11,7 +11,21 @@ export const Testing =() => {
     const [listItems, setListItems] = useState([]);
     const recipeName = useRef();
     const recipeDesc = useRef();
+    const emailSubject = useRef();
+    const emailMessage = useRef();
 
+    const sendMail = async() => {
+
+        
+        const res = await fetch(
+            `/php/models/eMail.php?subject=${emailSubject.current.value}&message=${emailMessage.current.value}`
+        )
+        .then(res=>res.json())
+        .then(data=>{return data})
+        .catch(error=>{return error})
+
+        console.log(res);
+    }
     const testRecipeAdd = async () => {
         const recipes = [
             {
@@ -119,6 +133,11 @@ export const Testing =() => {
                 <button onClick={testSelect}>Get Recipe</button>
                 <button onClick={testGetList}>Get List</button>
                 <button onClick={testDelete}>Delete Recipe</button>
+            </div>
+            <div>
+                <input ref={emailSubject}/>
+                <input ref={emailMessage}/>
+                <button onClick={sendMail}>Send Mail</button>
             </div>
         </div>
         

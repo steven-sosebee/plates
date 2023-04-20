@@ -7,7 +7,7 @@ export const Ingredients =()=>{
     
     useEffect(()=>{
         let lastRow = document.getElementById('ingredients').getElementsByTagName('tr');
-        console.log(l.length);
+        
         if (l.length>0){
             // console.log(lastRow[lastRow.length - 1]);
             // l[l.length-1].cells[0].focus();
@@ -18,9 +18,9 @@ export const Ingredients =()=>{
     const addIngredient=()=>{
         let _l
         if (!l) {
-            _l=[<Ingredient/>];
+            _l=[<Ingredient key={0}/>];
         } else {
-            _l=[...l,<Ingredient/>];
+            _l=[...l,<Ingredient key={l.length}/>];
         } 
         setL(_l);
     

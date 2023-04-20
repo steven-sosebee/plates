@@ -32,19 +32,20 @@ export const MealAdd =() => {
             name: document.getElementById('recipe_name').value,
             description: document.getElementById('description').value
         });
+        const recipeID = _recipe.newIDs[0];
 
         const instructions = [...document.getElementById('instructions').rows].map((x,i)=>({
             stepTitle: getValue(x.cells[0]), 
             stepCategory: parseInt(getValue(x.cells[1])), 
             stepMinutes:parseInt(getValue(x.cells[3])) || 0,
             stepDescription: getValue(x.cells[2]),
-            recipeId: _recipe.newIDs[0],
+            recipeId: recipeID,
             stepOrder: i + 1}));
         
         const ingredients = [...document.getElementById('ingredients').rows].map((x,i)=>({
             ingredientName:getValue(x.cells[0]),
             ingredientSizeQty:getValue(x.cells[1]),
-            recipeId: _recipe.newIDs[0],
+            recipeId: recipeID,
             ingredientSize:getValue(x.cells[2]) 
         }));
         
@@ -53,8 +54,8 @@ export const MealAdd =() => {
         const _ing = await new Ingredient().add(ingredients)
         
         // console.log([_recipe,_inst,_ing]);
-        console.log(_recipe, _ing, _inst);
-        // window.location.href = `/recipe/${_recipe.id}`;
+        // console.log(_recipe, _ing, _inst);
+        window.location.href = `/recipe/${recipeID}`;
 
     }
 

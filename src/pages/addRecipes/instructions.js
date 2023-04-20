@@ -9,7 +9,6 @@ export const Instructions =()=>{
     
     useEffect(()=>{
         let lastRow = document.getElementById('instructions').getElementsByTagName('tr');
-        console.log(l.length);
         if (l.length>0){
             // console.log(lastRow[lastRow.length - 1]);
             // l[l.length-1].cells[0].focus();
@@ -18,7 +17,6 @@ export const Instructions =()=>{
     },[l])
     const addStep =(e)=>{
         let _l
-        console.log(l.length)
         if (!l) {
             _l=[<Step key={0}/>];
         } else {
