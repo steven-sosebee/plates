@@ -13,7 +13,118 @@ export const Testing =() => {
     const recipeDesc = useRef();
     const emailSubject = useRef();
     const emailMessage = useRef();
+    const [ep,setEP] = useState();
+    const [a, setAuth] = useState();
+    const [dh,setDH] = useState();
+    const [pnData,setPN] = useState();
+    const [status, setStatus] = useState();
+    const pnTest = async() => {
+        let data = {};
+        data.bAvailable = {
+            serviceworker:('serviceWorker' in navigator), 
+            pushManager: ('PushManager' in window),
+            Notification: ('Notification' in window)
+        };
+        const sw = await navigator.serviceWorker.ready;
+        data.swReady = sw;
+        data.permission = window.Notification.permission;
+        // JSON.stringify(data);
+        setPN(JSON.stringify(data));
+    }
+    const pnAccept = async () =>{
+        // await window.Notification.requestPermission();
+        alert("Push turned on");
+    }
+    function pnAvailable() {
+        var bAvailable = false;
+        if (window.isSecureContext) {
+            // running in secure context - check for available Push-API
+            bAvailable = (('serviceWorker' in navigator) && 
+                          ('PushManager' in window) && 
+                          ('Notification' in window)); 
+            console.log(`bAvailable - ${bAvailable}`)
+        } else {
+            console.log('site have to run in secure context!');
+        }
+        alert(`Push is available: ${bAvailable}`)
+        return bAvailable;
+      }
 
+    const pnUnsubscribe =async () => {
+        const sw = await navigator.serviceWorker.ready;
+        const sub = await sw.pushManager.getSubscription()
+        
+        sub.unsubscribe()
+        console.log(sub);
+    };
+
+    const pnGetSubcription = async () => {
+
+        const sw = await navigator.serviceWorker.ready;
+        const sub = await sw.pushManager.getSubscription();
+        // const key = sub.getKey("p256dh");
+        // const auth = sub.getKey("auth");
+      
+        // console.log(key);
+        // console.log(auth);
+        const keys = sub.toJSON();
+        const body = {        
+            endpoint: keys.endpoint,
+            auth: keys.keys.auth,
+            p256dh:keys.keys.p256dh
+        }
+        setEP(keys.endpoint);
+        setAuth(keys.keys.auth);
+        setDH(keys.keys.p256dh);
+
+        const push = await fetch("/php/test/sub.php",
+            {
+                "method":"POST",
+                "body":JSON.stringify(body)
+            });
+        const response = await push.json();
+        if (push.ok){
+            console.log(response)
+            console.log(push);
+        } else {
+            console.log(push.status);
+
+        }
+      }
+
+    const pnSubscribe= async () => {
+        setStatus('checking if available...');
+        if (pnAvailable()) {
+            // if not granted or denied so far...
+            if (window.Notification.permission === 'default') {
+                await window.Notification.requestPermission();
+            }
+            if (Notification.permission === 'granted') {
+                // register service worker
+                setStatus('is serviceWorker ready...');
+                  const sw = await navigator.serviceWorker.ready;
+                  setStatus('serviceWorker ready...');
+                  const options = {
+                    userVisibleOnly: true,
+                    applicationServerKey:"BKCkVGJHHcFpk1yQ6myzQWlSbBZ1-iyxTIsfkMczdD3jlnlr8FDA__W8YSkELh-3W_zR2yzue3cSV7J3FjASzMU"
+                    }
+                    setStatus('subscribing...');
+                    const sub = await sw.pushManager.subscribe(options);
+                    setStatus('subscription ready...');
+                    const keys = sub.toJSON();
+                    const body = {        
+                        endpoint: keys.endpoint,
+                        auth: keys.keys.auth,
+                        p256dh:keys.keys.p256dh
+                    }
+                    setEP(keys.endpoint);
+                    setAuth(keys.keys.auth);
+                    setDH(keys.keys.p256dh);
+                            }
+                        }
+                    }
+      
+      
     const sendMail = async() => {
 
         
@@ -111,7 +222,19 @@ export const Testing =() => {
 
     return (
         <div>
-            <label>ListItem</label><input ref = {listItem} id="groceryId"></input>
+            <div>
+                <button onClick={pnTest}>Testing PN</button>
+                <p>{pnData}</p>
+            </div>
+            <button onClick={pnAccept}>Accept Notifications</button>
+            <button onClick={pnSubscribe}>Subscribe</button>
+            <button onClick={pnUnsubscribe}>Unsubscribe</button>
+            <button onClick={pnGetSubcription}>Get Subscription</button>
+
+            <p>{ep}</p>
+            <p>{a}</p>
+            <p>{dh}</p>
+            {/* <label>ListItem</label><input ref = {listItem} id="groceryId"></input>
             <label>ListId</label><input ref = {listId} id="listId"></input>
 
             <button onClick={()=>{testAdd()}}>Test</button>
@@ -138,7 +261,7 @@ export const Testing =() => {
                 <input ref={emailSubject}/>
                 <input ref={emailMessage}/>
                 <button onClick={sendMail}>Send Mail</button>
-            </div>
+            </div> */}
         </div>
         
     )

@@ -21,6 +21,7 @@ import { RecipeEdit } from "./pages/editRecipe";
 import { DnDProvider, DragNDropContext } from "./context/drag-n-drop";
 import { ShoppingList } from "./pages/shoppingList";
 
+
 function App() {
   return (
     <DnDProvider>
@@ -32,6 +33,7 @@ function App() {
         <NavLink to={"/groceries/add"}>Add Groceries</NavLink>
         <NavLink to={"/shoppingList"}>Shopping List</NavLink>
         <NavLink to={"/bread"}>Bread Calculator</NavLink>
+        <NavLink to={"/testing"}>Testing Page</NavLink>
         <Routes>
           <Route path="/bread" element={<BreadCalc/>}/>
           <Route path="/recipe/add" element={<MealAdd/>}/>

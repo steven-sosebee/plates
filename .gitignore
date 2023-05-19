@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+/Logs
 /vendor
 /tmp
 /.pnp
@@ -11,7 +12,7 @@ config.ini
 # testing
 /coverage
 /php/archive
-/php/testing
+/php/test
 # production
 /client/build
 /build
@@ -30,4 +31,5 @@ yarn-error.log*
 
 /server/node_modules
 /client/node_modules
+/_delete
 .env
