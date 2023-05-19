@@ -1,100 +1,87 @@
 <?php
-
-class Base {
-    protected $db_host;
-    protected $db_userName;
-    protected $db_password;
-    protected $db;
+require_once __DIR__ . "/../index.php";
+class Base2 extends Utility {
     protected $query;
-
-    // initialize the new object.
+    protected $table;
+    protected $sql;
+    protected $stmt;
+    protected $execParams;
+    protected $tbl;
+    protected $fields;
+    protected $sqlFields;
+    protected $affected_rows;
+    protected $idField;
+    protected $params;
+    protected $addFields;
+    protected $database;
+    protected $deleteSQL;
+    
+// initialize the new object.
     function __construct(){
-        $this->_connect('box5934.bluehost.com:3306', 'steveqv1_root', 'walrus', 'steveqv1_cookbook');
-        $this->values = '?';
-        $this->response = (object)[];
+        $this->execParams=(array)[];
+        $this->affected_rows=0;
+        $this->deleteSQL = "DELETE FROM {$this->tbl} WHERE id = ?";
     }
-    // standard connectivity
-    public function _connect($db_host,$db_userName,$db_password,$db){
-        $this->db_host=$db_host;
-        $this->db_userName=$db_userName;
-        $this->db_password=$db_password;
-        $this->db=$db;
-        try{
-            $this->connection=mysqli_connect($this->db_host, $this->db_userName, $this->db_password,$this->db);
-        }
-        catch( Exception $e){
-            $this->res['error'] = $e->getMessage();            
-        }
-    }
-    // close connection to DB.  TODO add more code for error monitoring.
-    public function disconnect(){
-        mysqli_close($this->connection);
+
+    public function placeholders(){
+        $p = array();
+        if (sizeof(array_keys($this->params[0]))>1){
+        for ($i=0; $i<sizeof(array_keys($this->params[0])); $i++){
+            $p[]='?';
+        };
+        return implode(',',$p);
+        };
     }
     // standard function to return data from the DB.  Sends info to parent function.
     public function runQuery(){
         try{
-            return $this->connection->query($this->sql)->fetch_all(MYSQLI_ASSOC);
+            // $this->testing = CONN;
+            $this->stmt=$this->database->PDOConn->prepare($this->sql);
+            $this->stmt->execute($this->execParams);    
+            $this->data = $this->stmt->fetchAll(PDO::FETCH_ASSOC);
         }
         catch( Exception $e){
-            $this->res['error'] = $e->getMessage();
+            $this->addResponse('error', $e->getMessage());
         };
     }
     
-    public function listAll(){
-        $this->displayFields = implode(',',$this->displayFields);
-        $this->sql="SELECT $this->displayFields FROM $this->tbl";
-        $this->res = $this->runQuery();
-        $this->response();
+    public function addResponse($field, $value){
+        $this->response[$field]=$value;
     }
+
     // standard INSERT function.  Sends info to parent function.
     public function insertInto (){
         try{
-            $this->sqlPrepare();
-            $this->sql = "INSERT INTO $this->tbl ($this->fields) VALUES ($this->values)";
-            $this->stmt=$this->connection->prepare($this->sql);
-            $this->res['id'] =  mysqli_insert_id($this->connection);
+            $values=$this->placeholders();
+            $addFields = implode(',', array_keys($this->params[0]));  
+            $this->sql = "INSERT INTO $this->tbl ($addFields) VALUES ($values)";
+            $this->stmt=CONN->PDOConn->prepare($this->sql);
+            $newIDs = array();
+
+            foreach($this->params as $item){
+                $this->stmt->execute(array_values($item));
+                $this->affected_rows = $this->affected_rows + $this->stmt->rowCount();
+                $this->newIDs[] = CONN->PDOConn->lastInsertId();
+            }
+            // $this->addResponse('ID',$newIDs);
+            $this->message = "{$this->affected_rows} record(s) sucessfully added";
         }
         catch( Exception $e){
-            $this->res['error'] = $e->getMessage();
+            $this->errorOut($e->getMessage());
         };
     }
-    // standard DELETE function.  Sends info to parent function.
-    public function deleteId($params){
-        $this->sql = "DELETE FROM $this->tbl WHERE $this->idField=?";
+    
+// standard DELETE function.  Sends info to parent function.
+    public function deleteFrom($id){
         try{
-        $this->stmt = $this->connection->prepare($this->sql);
-        $this->stmt->bind_param("i",$params['data']['id']);
-        $this->stmt->execute();
-        $this->res['affectedRows'] = $this->stmt->affected_rows;
-        $this->res['info'] = "Record deleted...";
+        // $this->stmt = CONN->PDOConn->prepare($this->deleteSQL);
+        $this->stmt->execute([$id]);
+        $this->affected_rows = $this->affected_rows + $this->stmt->rowCount();
+        $this->message = "{$this->affected_rows} record(s) sucessfully deleted";
         } catch( Exception $e){
-            $this->res['error'] = $e->getMessage();
+            $this->error = $e->getMessage();
+            // $this->errorOut($e->getMessage());
         };
-        $this->disconnect();
-        $this->response();
-    }
-
-    public function sqlPrepare(){        
-        for ($i=1; $i<sizeof($this->fields); $i++){
-            $this->values = $this->values.',?';
-        }
-        $this->fields = implode(',',$this->fields);     
-    }
-
-    public function executeInsert(){
-        $this->stmt->execute();
-        $this->res['id'] =  mysqli_insert_id($this->connection);
-        $this->res['affectedRows'] = $this->stmt->affected_rows;
-    }
-
-    public function classOutput(){
-        $this->res['class'] = get_object_vars($this);
-    }
-
-    public function response(){
-        echo json_encode($this->res);
-        $this->disconnect();
-    }
-        
+    }        
 }
 ?>

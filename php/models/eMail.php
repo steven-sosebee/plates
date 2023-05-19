@@ -1,7 +1,8 @@
 <?php
 
 // error_reporting (E_ALL ^ E_NOTICE ^ E_DEPRECATED ^ E_STRICT);
-
+ini_set("include_path", '/home3/steveqv1/php:' . ini_get("include_path") );
+// require_once "/home3/steveqv1/php/Mail.php";
 require_once "Mail.php";
 require_once "../config/email_config.php";
 $host = EMAIL_HOST;
@@ -23,6 +24,4 @@ echo json_encode($mail->getMessage()) ;
 } else {
 echo json_encode("message sent successfully...") ;
 }
-
-// echo json_encode($_GET);
 ?>

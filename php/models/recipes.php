@@ -1,52 +1,92 @@
 <?php
-    class Recipe extends Base
-    {
-        protected $tbl;
-        
-        public function __construct(){
-            parent::__construct();
-            $this->tbl='recipe';
 
-        }
-        public function add($params){
-            $userId=1;
-            $sql="INSERT INTO recipe (recipe_name,description,recipeUser,created_at,updated_at) VALUES (?,?,?,?,?)";
-            $stmt = $this->connection->prepare($sql);
-            $stmt->bind_param("ssiss",$params['recipe_name'],$params['description'],$params['userId'],$params['created_at'],$params['updated_at']);
-            $stmt->execute();
-            // $res = $stmt->affected_rows;
-            $res['id'] =  mysqli_insert_id($this->connection);
-            echo json_encode($res);
-        }
+class Recipe2 extends Base2 {
+    // protected $tbl;
+    protected $fields;
+    protected $sqlFields;
+    protected $sql;
+    protected $affectedRows;
 
-        public function list(){
-            $this->sql="SELECT * FROM recipe";
-            echo json_encode($this->runQuery());
-        }
+    public function __construct($params, $db){
+        $this->tbl='tblRecipes';
+        $this->params = $params;
+        $this->fields=[
+            'id',
+            'name',
+            'description',
+            'userId'
+        ];
+        $this->addFields=[
+            'name',
+            'description'
+        ];
+        $this->sqlFields = implode(',',$this->fields);
+        $this->idField='id';
+        $this->sql = "SELECT $this->sqlFields FROM $this->tbl";
+        $this->database = $db;
+        parent::__construct();
+    }
 
-        public function select($params){
-            $this->sql="SELECT * from $this->tbl WHERE recipeId=?";
-            $stmt = $this->connection->prepare($this->sql);
-            $stmt->bind_param("i",$params['id']);
-            $stmt->execute();
-            $res = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
-            echo json_encode($res);
+    public function add(){
+        // $this->items = $params['params'];
+        try{
+        $this->insertInto();
+        return $this;
         }
-        public function delete($params){
-            $sql = "DELETE FROM recipe WHERE recipeId=?";
-            $stmt = $this->connection->prepare($sql);
-            $stmt->bind_param("i", $params['recipeId']);
-            $stmt->execute();
-            $res = $stmt->affected_rows;
-            echo json_encode($res);
-        }
-
-        public function addToList($params){
-            $ingredients = (new Ingredient)->select2($params);
-            // $this->res = $ingredients;
-            // $this->response();
-            echo json_encode($ingredients);
+        catch (Exception $e){
+            return $e->getMessage();
         }
     }
-    
+
+    public function list(){
+        $this->runQuery();
+        return $this;
+    }
+
+    public function select(){
+        $this->sql = "SELECT * FROM $this->tbl WHERE id = ?";
+        $this->execParams = [$this->params['id']];
+        $this->ingredients = (new Ingredient2($this->params, $this->database))->recipeSelect();
+        $this->instructions = (new Step2($this->params, $this->database))->recipeSelect();
+        $this->runQuery();
+        return $this;
+    }
+
+    public function delete(){
+        $this->deleteSQL = "DELETE FROM $this->tbl WHERE id = ?";
+        $id = $this->params['params']['id'];
+        $this->ingredients = (new Ingredient2($id))->recipeDelete();
+        $this->instructions = (new Step2($id))->recipeDelete();
+        $this->deleteFrom($id);
+        return $this;
+    }
+
+    public function update(){
+        $this->sql = "UPDATE $this->tbl 
+            SET 
+                name = ?, 
+                description = ?
+            WHERE
+                id = ?";
+        
+        $this->stmt=$this->database->PDOConn->prepare($this->sql);
+        // $this->test = $this->params;
+            foreach($this->params as $item){
+                $name = $item['name'];
+                $description = $item['description'];
+                $id = $item['id'];        
+                $this->stmt->execute([$name,$description,$id]);
+                $this->affected_rows = $this->affected_rows + $this->stmt->rowCount();
+                $this->ingredients = (new Ingredient2($item['ingredients']))->update();
+                $this->instructions = (new Step2($item['instructions']))->update();
+            }
+            $this->message = "{$this->affected_rows} record(s) sucessfully updated";
+  
+        return $this;
+    }
+    public function getIngredients(){
+
+    }
+
+}
 ?>
