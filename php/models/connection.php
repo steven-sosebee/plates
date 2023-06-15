@@ -15,32 +15,32 @@
 // standard connectivity
         public function _connect(){
             try{
-                $this->PDOConn= new PDO(
+                $this->connection= new PDO(
                     "mysql:host=".DB_HOST.
                     ";port=".DB_PORT.
                     ";dbname=".DB
                     , DB_USER
                     , DB_PASSWORD,
                 array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
-                $this->addResponse("connection",true);
+                $this->connected = true;
             } catch (PDOException $e) {
-                $this->addResponse("connection",false);
-                $this->addResponse('Connection failed',$e->getMessage());
+                $this->connected = false;
+                return $e->getMessage();
             }
         }
             
 // close connection to DB.  TODO add more code for error monitoring.
         public function disconnect(){
-            $this->PDOConn = NULL;
+            $this->connection = NULL;
         }
 
-        public function addResponse($field, $value){
-            $this->response[$field]=$value;
-        }
+        // public function addResponse($field, $value){
+        //     $this->response[$field]=$value;
+        // }
         
-        public function response(){
-            echo json_encode($this->response);
-            // $this->disconnect();
-        }
+        // public function response(){
+        //     echo json_encode($this->response);
+        //     // $this->disconnect();
+        // }
     }
 ?>

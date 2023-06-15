@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . "/../index.php";
-class Base2 extends Utility {
+class Base {
     protected $query;
     protected $table;
     protected $sql;
@@ -36,7 +36,7 @@ class Base2 extends Utility {
     public function runQuery(){
         try{
             // $this->testing = CONN;
-            $this->stmt=$this->database->PDOConn->prepare($this->sql);
+            $this->stmt=$this->connection->prepare($this->sql);
             $this->stmt->execute($this->execParams);    
             $this->data = $this->stmt->fetchAll(PDO::FETCH_ASSOC);
         }
@@ -55,26 +55,26 @@ class Base2 extends Utility {
             $values=$this->placeholders();
             $addFields = implode(',', array_keys($this->params[0]));  
             $this->sql = "INSERT INTO $this->tbl ($addFields) VALUES ($values)";
-            $this->stmt=CONN->PDOConn->prepare($this->sql);
+            $this->stmt=$this->connection->prepare($this->sql);
             $newIDs = array();
 
             foreach($this->params as $item){
                 $this->stmt->execute(array_values($item));
                 $this->affected_rows = $this->affected_rows + $this->stmt->rowCount();
-                $this->newIDs[] = CONN->PDOConn->lastInsertId();
+                $this->newIDs[] = $this->connection->lastInsertId();
             }
             // $this->addResponse('ID',$newIDs);
             $this->message = "{$this->affected_rows} record(s) sucessfully added";
         }
         catch( Exception $e){
-            $this->errorOut($e->getMessage());
+            $this->message = $e->getMessage();
         };
     }
     
 // standard DELETE function.  Sends info to parent function.
     public function deleteFrom($id){
         try{
-        // $this->stmt = CONN->PDOConn->prepare($this->deleteSQL);
+        $this->stmt = $this->connection->prepare($this->deleteSQL);
         $this->stmt->execute([$id]);
         $this->affected_rows = $this->affected_rows + $this->stmt->rowCount();
         $this->message = "{$this->affected_rows} record(s) sucessfully deleted";

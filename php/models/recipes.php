@@ -1,11 +1,12 @@
 <?php
 
-class Recipe2 extends Base2 {
+class Recipe extends Base {
     // protected $tbl;
     protected $fields;
     protected $sqlFields;
     protected $sql;
     protected $affectedRows;
+    protected $connection;
 
     public function __construct($params, $db){
         $this->tbl='tblRecipes';
@@ -18,12 +19,14 @@ class Recipe2 extends Base2 {
         ];
         $this->addFields=[
             'name',
-            'description'
+            'description',
+            'recipe',
+            'ingredients'
         ];
         $this->sqlFields = implode(',',$this->fields);
         $this->idField='id';
         $this->sql = "SELECT $this->sqlFields FROM $this->tbl";
-        $this->database = $db;
+        $this->connection = $db->connection;
         parent::__construct();
     }
 

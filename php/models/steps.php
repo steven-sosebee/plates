@@ -1,6 +1,6 @@
 <?php
 
-class Step2 extends Base2 {
+class Step extends Base {
     protected $tbl;
     protected $fields;
     protected $sqlFields;

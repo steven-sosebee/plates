@@ -3,7 +3,7 @@ import { dateCurrTS, dbCall } from "../utils";
 export default class Recipe {
     constructor() {
         this.TS = dateCurrTS();
-        this.class = 'Recipe2';
+        this.class = 'Recipe';
         this.header = {
             class: this.class
         };

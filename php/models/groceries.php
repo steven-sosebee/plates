@@ -1,6 +1,6 @@
 <?php
 
-    class Grocery2 extends Base2{
+    class Grocery extends Base{
 
         function __construct(){
             $this->table = 'tblGroceries';

@@ -1,6 +1,6 @@
 <?php
 
-class Ingredient2 extends Base2 {
+class Ingredient extends Base {
     // protected $tbl;
 
     public function __construct($params, $db){
